@@ -1,0 +1,21 @@
+package com.spring.db.repository;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.stereotype.Repository;
+
+import com.spring.basic.model.ScoreVO;
+
+@Repository
+public class ScoreDAO implements IScoreDAO {
+
+	
+
+}
+
+
+
+
+
+

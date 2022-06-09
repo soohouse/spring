@@ -1,0 +1,16 @@
+package com.spring.db;
+
+public class MainClass {
+
+	public static void main(String[] args) {
+		
+
+		Car s1 = new Sonata();
+		s1.run();
+		
+		Car s2 = new Sonata();
+		s2.run();
+
+	}
+
+}

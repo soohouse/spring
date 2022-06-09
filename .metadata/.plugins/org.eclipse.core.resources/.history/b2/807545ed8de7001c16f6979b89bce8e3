@@ -1,0 +1,45 @@
+package com.spring.db.repository;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.stereotype.Repository;
+
+
+
+@Repository
+public class ScoreDAO implements IScoreDAO {
+
+	@Override
+	public void insertScore(com.spring.db.model.ScoreVO score) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<com.spring.db.model.ScoreVO> selectAllScores() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void deleteScore(int num) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public com.spring.db.model.ScoreVO selectOne(int num) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	
+
+}
+
+
+
+
+
+

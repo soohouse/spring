@@ -1,0 +1,67 @@
+package com.spring.db.repository;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.util.List;
+
+import org.springframework.stereotype.Repository;
+
+import com.spring.db.model.ScoreVO;
+
+import oracle.jdbc.proxy.annotation.Pre;
+
+
+
+@Repository
+public class ScoreDAO implements IScoreDAO {
+
+	@Override
+	public void insertScore(ScoreVO score) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		
+		String sql = "INSERT INTO scores VALUES(id_seq.NEXTVAL,?,?,?,?,?,?)";
+		
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			conn = DriverManager.getConnection("");
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, score.getStuName());
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			
+		}
+		
+	}
+
+	@Override
+	public List<ScoreVO> selectAllScores() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void deleteScore(int num) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public ScoreVO selectOne(int num) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	
+
+	
+
+}
+
+
+
+
+
+
