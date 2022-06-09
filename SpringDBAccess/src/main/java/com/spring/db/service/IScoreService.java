@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.spring.db.model.ScoreVO;
 
-
 public interface IScoreService {
 	
 	//점수 등록 기능

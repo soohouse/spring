@@ -14,7 +14,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.spring.db.model.ScoreVO;
 import com.spring.db.service.IScoreService;
 
-
 @Controller
 @RequestMapping("/score")
 public class ScoreController {
@@ -77,28 +76,14 @@ public class ScoreController {
 		if(vo == null) {
 			ra.addFlashAttribute("msg", "검색 결과가 없습니다.");
 			return "redirect:/score/search";
-		}
+		} 
+		
 		model.addAttribute("stu", vo);
 		return "score/search-result";
+		
+
 	}
 	
 	
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

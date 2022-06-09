@@ -1,5 +1,26 @@
 package com.spring.db.model;
 
+/*
+-- 점수 테이블 생성
+CREATE TABLE scores(
+   stu_id NUMBER PRIMARY KEY,
+   stu_name VARCHAR2(30) NOT NULL,
+   kor NUMBER DEFAULT 0,
+   eng NUMBER DEFAULT 0,
+   math NUMBER DEFAULT 0,
+   total NUMBER DEFAULT 0,
+   average NUMBER(5, 2)
+);
+
+CREATE SEQUENCE id_seq 
+   START WITH 1
+   INCREMENT BY 1
+   MAXVALUE 1000
+   NOCYCLE
+   NOCACHE;
+
+*/
+
 public class ScoreVO {
 	
 	private int stuId;
@@ -83,23 +104,3 @@ public class ScoreVO {
 	
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

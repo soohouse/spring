@@ -1,6 +1,20 @@
 package com.spring.db.model;
 
-import java.util.Set;
+/*
+ CREATE TABLE jdbc_board (
+    board_no NUMBER PRIMARY KEY,
+    writer VARCHAR2(30) NOT NULL,
+    title VARCHAR2(100) NOT NULL,
+    content VARCHAR2(1000)
+);
+
+CREATE SEQUENCE bid_seq
+    START WITH 1
+    INCREMENT BY 1
+    MAXVALUE 1000
+    NOCYCLE
+    NOCACHE;
+ */
 
 public class BoardVO {
 	
@@ -9,7 +23,8 @@ public class BoardVO {
 	private String title;
 	private String content;
 	
-	//
+	public BoardVO() {}
+	
 	
 	public BoardVO(int boardNo, String writer, String title, String content) {
 		super();
@@ -50,6 +65,8 @@ public class BoardVO {
 	public String toString() {
 		return "BoardVO [boardNo=" + boardNo + ", writer=" + writer + ", title=" + title + ", content=" + content + "]";
 	}
+	
+	
 	
 	
 

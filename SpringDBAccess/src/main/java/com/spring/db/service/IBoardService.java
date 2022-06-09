@@ -4,8 +4,6 @@ import java.util.List;
 
 import com.spring.db.model.BoardVO;
 
-
-
 public interface IBoardService {
 	
 	//게시글 등록
@@ -21,7 +19,10 @@ public interface IBoardService {
 	void deleteArticle(int bId);
 	
 	//게시글 수정
-	void updateArticle(BoardVO vo, int bId);
+	void updateArticle(BoardVO vo);
+	
+	//게시글 검색
+	List<BoardVO> searchList(String keyword);
 
 }
 

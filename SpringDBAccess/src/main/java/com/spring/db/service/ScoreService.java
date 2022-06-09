@@ -9,7 +9,6 @@ import com.spring.db.model.ScoreVO;
 import com.spring.db.repository.IScoreDAO;
 import com.spring.db.repository.IScoreMapper;
 
-
 @Service
 public class ScoreService implements IScoreService {
 
@@ -19,7 +18,7 @@ public class ScoreService implements IScoreService {
 	
 	//MyBatis를 이용한 SQL 처리.
 	@Autowired
-	private IScoreMapper mapper;
+	private IScoreMapper mapper;	
 	
 	@Override
 	public void insertScore(ScoreVO score) {
@@ -30,25 +29,17 @@ public class ScoreService implements IScoreService {
 
 	@Override
 	public List<ScoreVO> selectAllScores() {		
-		return dao.selectAllScores();
+		return mapper.selectAllScores();
 	}
 
 	@Override
 	public void deleteScore(int num) {
-		dao.deleteScore(num - 1);
+		mapper.deleteScore(num);
 	}
 
 	@Override
 	public ScoreVO selectOne(int num) {
-		return dao.selectOne(num - 1);
+		return mapper.selectOne(num);
 	}
 
 }
-
-
-
-
-
-
-
-

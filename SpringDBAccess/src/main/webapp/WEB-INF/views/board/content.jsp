@@ -9,7 +9,7 @@
 </head>
 <body>
 
-	<h2>${boardNo}번 게시물 내용</h2>
+	<h2>${article.boardNo}번 게시물 내용</h2>
 	<p>
 		# 작성자: ${article.writer} <br>
 		# 제목: ${article.title} <br>
@@ -17,10 +17,12 @@
 	</p>
 	
 	<a href="<c:url value='/board/list' />">글 목록 보기</a>
-	<a href="<c:url value='/board/modify?boardNo=${boardNo}' />">글 수정 하기</a>
+	<a href="<c:url value='/board/modify?boardNo=${article.boardNo}' />">글 수정 하기</a>
 
 </body>
 </html>
+
+
 
 
 
