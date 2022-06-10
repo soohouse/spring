@@ -12,7 +12,7 @@
 
 	<h2>학생들의 전체 성적 조회</h2>
 	
-	<c:forEach var="stu" items="${sList}" varStatus="stuNum">
+	<c:forEach var="stu" items="${sList}">
 		<p>
 			학번: ${stu.stuId}, 이름: ${stu.stuName}, 국어: ${stu.kor}, 영어: ${stu.eng}, 
 			수학: ${stu.math}, 총점: ${stu.total}, 평균: ${stu.average}
