@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-    
+
 <mapper namespace="com.spring.db.repository.IBoardMapper">
 
 	<resultMap type="com.spring.db.model.BoardVO" id="BoardMap">
-		<id property="boardNo" column="board_no"/>
+		<id property="boardNo" column="board_no" />
 	</resultMap>
-	
+
 	<insert id="insertArticle">
 		INSERT INTO jdbc_board
-		VALUES(bid_seq.NEXTVAL,#{writer},#{title},${content})
+		VALUES(bid_seq.NEXTVAL,#{writer},#{title},#{content})
 	</insert>
 	
 	<select id="getArticles" resultMap="BoardMap">
@@ -38,4 +38,6 @@
 		SELECT * FROM jdbc_board
 		WHERE writer LIKE #{keyword}
 	</select>
+
 </mapper>
+    

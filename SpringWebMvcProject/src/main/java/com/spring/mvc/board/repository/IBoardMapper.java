@@ -22,6 +22,14 @@ public interface IBoardMapper {
 	void delete(int boardNo);
 	
 	//게시글 수 조회 기능
-	
 
 }
+
+
+
+
+
+
+
+
+

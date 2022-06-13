@@ -32,8 +32,8 @@
     maxActive="8" 
     maxWait="1000" 
     name="jdbc/myOracle" 
-    password="Oracle_practice1" 
+    password="Oracle_practice2" 
     type="javax.sql.DataSource" 
     url="jdbc:oracle:thin:@db2022jisu_high?TNS_ADMIN=/Users/dood/Wallet_DB2022jisu" 
-    username="jsp"/>
+    username="spring"/>
 </Context>

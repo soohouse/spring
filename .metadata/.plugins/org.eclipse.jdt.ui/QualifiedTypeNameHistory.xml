@@ -11,7 +11,6 @@
 <fullyQualifiedTypeName name="com.spring.basic.model.ScoreVO"/>
 <fullyQualifiedTypeName name="org.springframework.stereotype.Service"/>
 <fullyQualifiedTypeName name="com.spring.basic.repository.IBoardDAO"/>
-<fullyQualifiedTypeName name="java.util.List"/>
 <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.GetMapping"/>
 <fullyQualifiedTypeName name="com.spring.basic.model.BoardVO"/>
 <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.PostMapping"/>
@@ -39,6 +38,19 @@
 <fullyQualifiedTypeName name="org.springframework.jdbc.core.JdbcTemplate"/>
 <fullyQualifiedTypeName name="org.springframework.jdbc.core.RowMapper"/>
 <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.RequestParam"/>
-<fullyQualifiedTypeName name="org.springframework.beans.factory.annotation.Autowired"/>
 <fullyQualifiedTypeName name="com.spring.db.repository.IScoreMapper"/>
+<fullyQualifiedTypeName name="com.spring.db.repository.IBoardMapper"/>
+<fullyQualifiedTypeName name="java.sql.Timestamp"/>
+<fullyQualifiedTypeName name="lombok.Getter"/>
+<fullyQualifiedTypeName name="lombok.Setter"/>
+<fullyQualifiedTypeName name="lombok.NoArgsConstructor"/>
+<fullyQualifiedTypeName name="lombok.AllArgsConstructor"/>
+<fullyQualifiedTypeName name="lombok.ToString"/>
+<fullyQualifiedTypeName name="java.util.List"/>
+<fullyQualifiedTypeName name="com.spring.mvc.board.model.BoardVO"/>
+<fullyQualifiedTypeName name="org.junit.runner.RunWith"/>
+<fullyQualifiedTypeName name="org.springframework.test.context.junit4.SpringJUnit4ClassRunner"/>
+<fullyQualifiedTypeName name="org.springframework.test.context.ContextConfiguration"/>
+<fullyQualifiedTypeName name="com.spring.mvc.board.repository.IBoardMapper"/>
+<fullyQualifiedTypeName name="org.springframework.beans.factory.annotation.Autowired"/>
 </qualifiedTypeNameHistroy>
