@@ -13,7 +13,7 @@ import com.spring.mvc.board.repository.IBoardMapper;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 //테스트 환경에서 Mapper 객체 활용을 위해 빈 등록 설정이 있는 xml 파일을 로딩.
-@ContextConfiguration(locations = {"file:src/main/webapp/WEB-INF/spring/mvc-config.xml"})
+@ContextConfiguration(locations = {"file:src/main/webapp/WEB-INF/spring/root-context.xml"})
 public class BoardMapperTest {
 
 	@Autowired
@@ -33,6 +33,7 @@ public class BoardMapperTest {
 
 	//게시글 목록 전체 조회 테스트
 	//게시물 개수 몇개인지 출력하시고, 게시글 모든 내용을 toString()으로 출력하세요.
+	/*
 	@Test
 	public void getListTest() {
 		List<BoardVO> list = mapper.getArticleList();
@@ -41,6 +42,7 @@ public class BoardMapperTest {
 			System.out.println(vo);
 		}
 	}
+	*/
 
 	//게시글 단일 조회 테스트
 	//44번글을 조회해서 글 상세 내용을 출력해 주세요.

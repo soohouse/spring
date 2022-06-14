@@ -15,8 +15,8 @@ import org.springframework.web.context.WebApplicationContext;
 import lombok.extern.log4j.Log4j;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"file:src/main/webapp/WEB-INF/spring/mvc-config.xml",
-"file:src/main/webapp/WEB-INF/spring/servlet-config.xml"})
+@ContextConfiguration(locations = {"file:src/main/webapp/WEB-INF/spring/root-context.xml",
+"file:src/main/webapp/WEB-INF/spring/appServlet/servlet-context.xml"})
 @WebAppConfiguration
 @Log4j
 public class BoardControllerTest {
@@ -71,19 +71,42 @@ public class BoardControllerTest {
 	//컨트롤러에서는 DB에서 가지고 온 글 객체를 model에 담아서 jsp로 이동시킬 것입니다.
 	//42번글을 보여달라는 요청을 넣으시고, 요청 결과가 들어있는 model을 출력해 보세요.
 	// /board/content -> get
+	@Test
+	public void testContent() throws Exception {
+		log.info(
+				mockMvc.perform(MockMvcRequestBuilders.get("/board/content")
+						.param("boardNo", "33")
+						).andReturn().getModelAndView().getModelMap()
+				);
+	}
 
 
 	//5번글의 제목과 내용을 수정하는 요청을 보낼 예정입니다.
 	//전송방식은 post 방식입니다.
 	//수정 후 이동하는 페이지는 해당 글의 상세보기 페이지입니다.
 	//컨트롤러가 리턴하는 viewName을 출력해 주세요. ("/board/modify")
-
-	
+	@Test
+	public void testModify() throws Exception {
+		log.info(
+				mockMvc.perform(MockMvcRequestBuilders.post("/board/modify")
+						.param("title", "수정된 테스트 글 제목 2")
+						.param("content", "수정된 테스트 글 내용2")
+						.param("boardNo", "5")
+						).andReturn().getModelAndView().getViewName()
+				);
+	}
 
 
 	//42번글을 삭제하세요.
 	//전송 방식은 post방식이고, 이동하는 곳은 목록 요청이 재요청될 것입니다.
-	//viewName을 출력해 주세요.	
+	//viewName을 출력해 주세요.
+	@Test
+	public void testRemove() throws Exception {
+		log.info(mockMvc.perform(MockMvcRequestBuilders.post("/board/delete")
+				.param("boardNo", "42")
+				).andReturn().getModelAndView().getViewName()
+				);
+	}
 }
 
 

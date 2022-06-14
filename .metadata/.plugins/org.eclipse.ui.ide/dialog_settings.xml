@@ -22,6 +22,7 @@
 		<item key="SmartImportRootWizardPage.STORE_NESTED_PROJECTS" value="true"/>
 		<item key="SmartImportRootWizardPage.STORE_CONFIGURE_NATURES" value="true"/>
 		<list key="org.eclipse.ui.internal.wizards.datatransfer.SmartImportRootWizardPage.knownSources">
+			<item value="/Users/dood/Desktop/java_web_JS/Spring/Spring 7일차 소스코드(WebMvc)/SpringWebMvcProject_1"/>
 			<item value="/Users/dood/Desktop/java_web_JS/Spring/Spring 3일차 소스코드(SpringWebBasic)"/>
 		</list>
 	</section>

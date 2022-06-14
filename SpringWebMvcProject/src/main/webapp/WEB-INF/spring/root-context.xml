@@ -14,10 +14,10 @@
 	
 	<!--  히카리 커넥션 풀 빈 등록 -->
 	<bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
-		<property name="driverClassName" value="oracle.jdbc.OracleDriver"/>
+		<property name="driverClassName" value="oracle.jdbc.OracleDriver" />
 		<property name="jdbcUrl" value="jdbc:oracle:thin:@db2022jisu_high?TNS_ADMIN=/Users/dood/Wallet_DB2022jisu"/>
-		<property name="username" value="spring"></property>
-		<property name="password" value="Oracle_practice2"></property>
+		<property name="username" value="spring"/>
+		<property name="password" value="Oracle_practice2"/>
 	</bean>
 	
 	<!-- 히카리 데이터소스 빈 등록 -->
@@ -31,6 +31,7 @@
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="ds" />
 		<property name="mapperLocations" value="classpath:/mappers/**/*Mapper.xml" />
+ 	</bean>
 <!-- 		<property name="mapperLocations">
 			<array>
 				<value>classpath:/mappers/score/ScoreMapper.xml</value>
@@ -38,7 +39,9 @@
 			</array>
 		</property>
  -->	
- 	</bean>
+ 	
+ 	
+ 
 	
 	<!-- 지정한 패키지를 스캔하여 존재하는 mapper 인터페이스를 빈 타입으로 등록.
 	 -->

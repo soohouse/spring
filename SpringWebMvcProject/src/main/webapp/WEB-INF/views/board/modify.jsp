@@ -13,23 +13,23 @@ header.masthead {
 <div class="row">
   <div class="col-lg-12">
     <div class="card">
-      <div class="card-header text-white" style="background-color: #643691;">###번 게시물 수정</div>
+      <div class="card-header text-white" style="background-color: #643691;">${article.boardNo}번 게시물 수정</div>
       <div class="card-body">
 
         <form role="form" action="#" method="post">
           <div class="form-group">
             <label>작성자</label>
-            <input type="text" class="form-control" name='writer' value="####">
+            <input type="text" class="form-control" name='writer' value="${article.writer}">
           </div>
           
           <div class="form-group">
             <label>제목</label>
-            <input type="text" class="form-control" name='title' value="###">
+            <input type="text" class="form-control" name='title' value="${article.title}">
           </div>
 
           <div class="form-group">
             <label>내용</label>
-            <textarea class="form-control" rows="5" name='content'>#####</textarea>
+            <textarea class="form-control" rows="5" name='content'>${article.content}</textarea>
           </div>
 
           

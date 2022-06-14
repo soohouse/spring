@@ -16,6 +16,10 @@ header.masthead {
 	background-color: #643691;
 	color: white;
 }
+
+.page-active {
+	background: #643691;
+}
 </style>
 
 <br><br> 
@@ -49,39 +53,46 @@ header.masthead {
 						</thead>
 
 						<!-- 게시물이 들어갈 공간 -->
-						
+						<c:forEach var="b"items="${articles}">
 							<tr style="color: #643691;">
-								<td></td>
-								<td></td>
+								<td>${b.boardNo}</td>
+								<td>${b.writer}</td>
 
 								<td>
-									<a style="margin-top: 0; height: 40px; color: orange;" href="<c:url value='/board/content?boardNo=${b.boardNo}' />">
-										
+									<a style="margin-top: 0; height: 40px; color: orange;" href="<c:url value='/board/content/${b.boardNo}?page=${pc.paging.page}&cpp=${pc.paging.cpp}' />">
+										${b.title}
 									</a>
 								</td>
 
-								<td></td>
-								<td></td>
+								<td>${b.regDate}</td>
+								<td>${b.viewCnt}</td>
 							</tr>
-						
+						</c:forEach>
 						
 					</table>
 					
 					<!-- 페이징 처리 부분  -->
 					<ul class="pagination justify-content-center">
-                       	<li class="page-item">
-							<a class="page-link" href="#" 
-							style="background-color: #643691; margin-top: 0; height: 40px; color: white; border: 0px solid #f78f24; opacity: 0.8">이전</a>
-						</li>
-						
-						<li class="page-item">
-						   <a href="#" class="page-link" style="margin-top: 0; height: 40px; color: pink; border: 1px solid #643691;">1</a>
-						</li>
-					   
-					    <li class="page-item">
-					      <a class="page-link" href="#" 
-					      style="background-color: #643691; margin-top: 0; height: 40px; color: white; border: 0px solid #f78f24; opacity: 0.8">다음</a>
-					    </li>
+						<!-- 이전 버튼 -->
+						<c:if test="${pc.prev}">
+	                       	<li class="page-item">
+								<a class="page-link" href="<c:url value='/board/list?page=${pc.beginPage-1}&cpp=${pc.cpp}'/>" 
+								style="background-color: #643691; margin-top: 0; height: 40px; color: white; border: 0px solid #f78f24; opacity: 0.8">이전</a>
+							</li>
+						</c:if>
+						<!--  페이지 버튼 -->
+						<c:forEach var="pageNum" begin="$pc.beginPage" end="${pc.endPage}">
+							<li class="page-item">
+							   <a href="<c:url value='/board/list?page=${pageNum}&cpp=${pc.paging.cpp}'/>" class="page-link ${pc.paging.page == pageNum ? 'page-acrive' : ''}" style="margin-top: 0; height: 40px; color: pink; border: 1px solid #643691;">${pageNum}</a>
+							</li>
+						</c:forEach>
+					    <!-- 다음 버튼 -->
+					    <c:if test="${pc.next}">
+						    <li class="page-item">
+						      <a class="page-link" href="<c:url value='/board/list?page=${pc.endPage+1}&cpp=${pc.cpp}'/>" 
+						      style="background-color: #643691; margin-top: 0; height: 40px; color: white; border: 0px solid #f78f24; opacity: 0.8">다음</a>
+						    </li>
+						</c:if>
 				    </ul>
 					<!-- 페이징 처리 끝 -->
 					</div>
@@ -107,7 +118,7 @@ header.masthead {
 	                        </div>
 	                    </div>
 	                    <div class="col-sm-2">
-							<a href="#" class="btn btn-cpp float-right">글쓰기</a>
+							<a href="<c:url value='/board/write'/>" class="btn btn-cpp float-right">글쓰기</a>
 						</div>
 						<div class="col-sm-2"></div>
 					</div>	
@@ -120,6 +131,27 @@ header.masthead {
 	
 	
 <jsp:include page="../include/footer.jsp" />
+
+<script>
+	const msg = '${msg}';
+	if(msg === 'delSuccess') {
+		alert('삭제가 완료되었습니다.');
+	} else if(msg === 'regSuccess') {
+		alert('등록이 완료되었습니다.');
+	}
+	
+	//start jQuery
+	$(function() {
+		
+		//한 페이지당 보여줄 게시물 개수가 변동하는 이벤트 처리
+		$('#count-per-page .btn-cpp').click(function() {
+				const count = $(this).val();
+				location.href='/board/list?page=1&cpp=' +count;
+		});
+		
+	}); //end jQuery
+
+</script>
 
 
 

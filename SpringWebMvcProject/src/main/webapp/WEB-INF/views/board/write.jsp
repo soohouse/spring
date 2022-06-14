@@ -36,7 +36,7 @@ header.masthead {
          <input type="submit" value="등록" class="btn form-control"
 			style="background-color: #643691; margin-top: 0; height: 40px; color: white; border: 0px solid #f78f24; opacity: 0.8">
           &nbsp;&nbsp;
-          <a class="btn form-control"	href="#"
+          <a class="btn form-control"	href="<c:url value='board/list'/>"
 		style="cursor: pointer; margin-top: 0; height: 40px; color: white; background-color: orange; border: 0px solid #388E3C; opacity: 0.8">취소</a>
         </form>
 

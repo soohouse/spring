@@ -2,6 +2,7 @@ package com.spring.mvc.board.repository;
 
 import java.util.List;
 
+import com.spring.mvc.board.commons.PageVO;
 import com.spring.mvc.board.model.BoardVO;
 
 public interface IBoardMapper {
@@ -10,7 +11,10 @@ public interface IBoardMapper {
 	void insert(BoardVO article);
 	
 	//게시글 전체 조회 기능(페이징 전)
-	List<BoardVO> getArticleList();
+	//List<BoardVO> getArticleList();
+	
+	//페이징 처리를 포함한 게시글 목록 조회 기능
+	List<BoardVO> getArticleList(PageVO paging);
 	
 	//게시글 상세 조회 기능
 	BoardVO getArticle(int boardNo);
@@ -22,7 +26,7 @@ public interface IBoardMapper {
 	void delete(int boardNo);
 	
 	//게시글 수 조회 기능
-
+	int countArticles();
 }
 
 
