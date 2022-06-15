@@ -5,6 +5,9 @@ import java.awt.PageAttributes;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.PageData;
 
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -24,6 +27,16 @@ public class PageCreator {
 	
 	//한 화면에 보여질 페이지 버튼 개수
 	private final int displayPageNum = 10;
+	
+	//URI 파라미터를 쉽게 만들어 주는 유틸 메서드
+	public String makeURI(int page) {
+		UriComponents ucp = UriComponentsBuilder.newInstance().queryParam("page", page)
+															  .queryParam("cpp", paging.getCpp())
+															  .queryParam("keyword", ((SearchVO) paging).getKeyword())
+															  .queryParam("condition",((SearchVO) paging).getCondition())
+															  .build();
+		return ucp.toUriString();
+	}
 	
 	//페이징 알고리즘을 수행할 메서드 선언
 	private void calcDataOfPage() {

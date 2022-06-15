@@ -15,6 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.spring.mvc.board.commons.PageCreator;
 import com.spring.mvc.board.commons.PageVO;
+import com.spring.mvc.board.commons.SearchVO;
 import com.spring.mvc.board.model.BoardVO;
 import com.spring.mvc.board.service.IBoardService;
 
@@ -25,8 +26,30 @@ public class BoardController {
 	@Autowired
 	private IBoardService service;
 	
-	//페이징 처리 이후 게시글 목록 불러오기 요청
+	//검색 처리 이후 게시글 목록 불러오기 요청
 	@GetMapping("/list")
+	public void list(SearchVO search, Model model) {
+		System.out.println("/board/list: GET");
+		System.out.println("페이지 번호: " + search.getPage());
+		System.out.println("검색어: " + search.getKeyword());
+		System.out.println("검색조건: " + search.getCondition());
+		
+		List<BoardVO> list = service.getArticleList(search);
+		
+		PageCreator pc = new PageCreator();
+		pc.setPaging(search);
+		pc.setArticleTotalCount(service.countArticles(search));
+		
+		System.out.println(pc);
+		
+		model.addAttribute("articles", list);
+		model.addAttribute("pc", pc);
+		
+	}
+	
+	/*
+	//페이징 처리 이후 게시글 목록 불러오기 요청
+	@GetMapping("/list") //keyword랑 condition이랑 같이 들어온다.
 	public void list(PageVO paging, Model model) {
 		System.out.println("/board/list: GET");
 		System.out.println("페이지 번호: " + paging.getPage());
@@ -42,7 +65,9 @@ public class BoardController {
 		
 		model.addAttribute("articles", list);
 		model.addAttribute("pc", pc);
+		
 	}
+	*/
 	
 	/*
 	//게시글 전체 목록 불러오기 요청
@@ -54,7 +79,7 @@ public class BoardController {
 		return "board/list";
 	}
 	*/
-	
+
 	//글쓰기 페이지로 이동 요청
 	@GetMapping("/write")
 	public void write() {
@@ -71,62 +96,46 @@ public class BoardController {
 		return "redirect:/board/list";
 	}
 	
-	//여기서부터~오후
-	
 	//게시글 상세보기 요청
-		@GetMapping("/content/{boardNo}")
-		//@PathVariable은 URL 경로에 변수를 포함시켜 주는 방식
-		//null이나 공백이 들어갈 수 있는 파라미터라면 적용하지 않는 것을 추천.
-		//파라미터 값에 .이 포함되어 있다면 .뒤의 값은 잘린다는 걸 알아두세요.
-		//{}안에 변수명을 지어주시고, @PathVariable 괄호 안에 영역을 지목해서
-		//값을 받아옵니다.
-		public String content(@PathVariable int boardNo, Model model,
-								@ModelAttribute ("p") PageVO paging) {
-			System.out.println("/board/content: GET");
-			System.out.println("요청된 글 번호: " + boardNo);
-			model.addAttribute("article", service.getArticle(boardNo));
-			return "board/content";
-		}
+	@GetMapping("/content/{boardNo}")
+	//@PathVariable은 URL 경로에 변수를 포함시켜 주는 방식
+	//null이나 공백이 들어갈 수 있는 파라미터라면 적용하지 않는 것을 추천.
+	//파라미터 값에 .이 포함되어 있다면 .뒤의 값은 잘린다는 걸 알아두세요.
+	//{}안에 변수명을 지어주시고, @PathVariable 괄호 안에 영역을 지목해서
+	//값을 받아옵니다.
+	public String content(@PathVariable int boardNo, Model model, 
+							@ModelAttribute("p") SearchVO search) {
+		System.out.println("/board/content: GET");
+		System.out.println("요청된 글 번호: " + boardNo);
+		model.addAttribute("article", service.getArticle(boardNo));
+		return "board/content";
+	}
+	
+	//게시글 수정 화면 요청
+	@GetMapping("/modify")
+	public void modify(int boardNo, Model model) {
+		model.addAttribute("article", service.getArticle(boardNo));
+	}
+	
+	//게시글 수정 처리 요청
+	@PostMapping("/modify")
+	public String modify(BoardVO article) {
+		System.out.println("/board/modify: POST");
+		service.update(article);
 		
-		//게시글 수정 화면 요청
-		@GetMapping("/modify")
-		public void modify(int boardNo, Model model) {
-			model.addAttribute("article", service.getArticle(boardNo));
-		}
+		return "redirect:/board/content/" + article.getBoardNo();
+	}
+	
+	//게시글 삭제 처리 요청
+	@PostMapping("/delete")
+	public String remove(int boardNo,
+						RedirectAttributes ra) {
+		System.out.println("/board/delete: POST");
+		service.delete(boardNo);
+		ra.addFlashAttribute("msg", "delSuccess");
 		
-		//게시글 수정 처리 요청
-		@PostMapping("/modify")
-		public String modify(BoardVO article) {
-			System.out.println("/board/modify: POST");
-			service.update(article);
-			
-			return "redirect:/board/content/" + article.getBoardNo();
-		}
-		
-		//게시글 삭제 처리 요청
-		@PostMapping("/delete")
-		public String remove(int boardNo,
-							RedirectAttributes ra) {
-			System.out.println("/board/delete: POST");
-			service.delete(boardNo);
-			ra.addFlashAttribute("msg", "delSuccess");
-			
-			return "redirect:/board/list";
-		}
+		return "redirect:/board/list";
+	}
+	
 	
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

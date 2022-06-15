@@ -3,6 +3,7 @@ package com.spring.mvc.board.service;
 import java.util.List;
 
 import com.spring.mvc.board.commons.PageVO;
+import com.spring.mvc.board.commons.SearchVO;
 import com.spring.mvc.board.model.BoardVO;
 
 public interface IBoardService {
@@ -14,7 +15,10 @@ public interface IBoardService {
 //	List<BoardVO> getArticleList();
 	
 	//페이징 처리를 포함한 게시글 목록 조회 기능
-	List<BoardVO> getArticleList(PageVO paging);
+	//List<BoardVO> getArticleList(PageVO paging);
+	
+	//검색 기능이 추가된 게시글 목록 조회 기능
+	List<BoardVO> getArticleList(SearchVO search);
 	
 	//게시글 상세 조회 기능
 	BoardVO getArticle(int boardNo);
@@ -26,7 +30,7 @@ public interface IBoardService {
 	void delete(int boardNo);
 	
 	//게시글 수 조회 기능
-	int countArticles();
+	int countArticles(SearchVO search);
 
 
 }

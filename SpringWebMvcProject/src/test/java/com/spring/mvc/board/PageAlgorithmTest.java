@@ -47,7 +47,8 @@ public class PageAlgorithmTest {
 	
 	@Autowired
 	private IBoardMapper mapper;
-	
+
+	/*
 	@Test
 	public void pagingAlgorithmTest() {
 		System.out.println("# 총 게시물 수: " + mapper.countArticles());
@@ -81,6 +82,6 @@ public class PageAlgorithmTest {
 		}
 		
 	}
-	
+	*/
 	
 }
