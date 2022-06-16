@@ -46,6 +46,7 @@
 	<!-- 지정한 패키지를 스캔하여 존재하는 mapper 인터페이스를 빈 타입으로 등록.
 	 -->
 	<mybatis-spring:scan base-package="com.spring.mvc.board.repository"/>
+	<mybatis-spring:scan base-package="com.spring.mvc.user.repository"/>
 		
 </beans>
       

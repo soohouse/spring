@@ -7,6 +7,9 @@ import java.util.Map;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -54,5 +57,32 @@ public class RestControllerTest {
 		p.setHobby(Arrays.asList("수영", "축구", "독서"));
 		
 		return p;
+	}
+	
+	//@RequestBody
+	//클라이언트 쪽에서 전송하는 JSON 데이터를
+	//서버에서 사용하는 자바 언어에 맞게 변환하여 받을 수 있게 해 주는 아노테이션.
+	@PostMapping("/getObject")
+	public Person getObject(@RequestBody Person person) {
+		System.out.println("/getObject 요청이 들어옴!");
+		System.out.println("이름: " + person.getName());
+		System.out.println("나이: " + person.getAge());
+		System.out.println("취미: " + person.getHobby());
+		
+		person.setAge(2);
+		
+		return person;
+	}
+	
+	@GetMapping("/getPath/{id}/{cpp}/{page}")
+	public Map<String, Object> getPath(@PathVariable String id,
+									   @PathVariable int cpp,
+									   @PathVariable int page){
+		Map<String, Object> map = new HashMap<>();
+		map.put("아이디", id);
+		map.put("게시물개수", cpp);
+		map.put("페이지번호",page);
+		
+		return map;
 	}
 }
