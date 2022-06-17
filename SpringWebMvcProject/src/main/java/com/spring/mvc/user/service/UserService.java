@@ -1,5 +1,8 @@
 package com.spring.mvc.user.service;
 
+import java.sql.Date;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -44,5 +47,13 @@ public class UserService implements IUserService {
 		// TODO Auto-generated method stub
 
 	}
+	
+	@Override
+	public void keepLogin(String session, Date limitTime, String account) {
+		
+
+		
+	}
+	
 
 }

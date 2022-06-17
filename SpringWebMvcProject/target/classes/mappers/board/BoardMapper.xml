@@ -10,15 +10,18 @@
 		<result property="viewCnt" column="view_cnt" />
 	</resultMap>
 	
-	<!-- 중복되는 동적SQL문을 미리 선언해 놓고 삽입하는 방식.
-		<include refid="sql id"/>를 통해 삽입해서 사용합니다. -->
+	<!-- 중복되는 동적 SQL문을 미리 선언해 놓고 삽입하는 방식.
+		<include refid="sql id" /> 를 통해 삽입해서 사용합니다.
+	 -->
 	<sql id="search">
 		<if test="condition == 'title'">WHERE title LIKE '%'||#{keyword}||'%'</if>
 		<if test="condition == 'writer'">WHERE writer LIKE '%'||#{keyword}||'%'</if>
 		<if test="condition == 'content'">WHERE content LIKE '%'||#{keyword}||'%'</if>
 		<if test="condition == 'titleContent'">WHERE title LIKE '%'||#{keyword}||'%'
-						OR content LIKE '%'||#{keyword}||'%'</if>
+							OR content LIKE '%'||#{keyword}||'%'</if>
 	</sql>
+	
+	
 
 	<insert id="insert">
 		INSERT INTO mvc_board
@@ -40,37 +43,37 @@
 			SELECT ROWNUM AS rn, tbl.* FROM	
 				(
 				SELECT * FROM mvc_board
-				<include refid="search"/>
+				<include refid="search" />
 				ORDER BY board_no DESC
 				) tbl
 			)
 		<![CDATA[
-		WHERE rn > (#{paging.page}-1) * #{paging.cpp}
-		AND rn <= #{paging.page} * #{paging.cpp}
+		WHERE rn > (#{page}-1) * #{cpp}
+		AND rn <= #{page} * #{cpp}
 		]]>
 	</select>
-	<!--  아노테이션에서 이름 붙여주고 사용하려면 꼭 알려줘야 사용할 수 있음.-->
-	
-	
 	
 	<select id="countArticles" resultType="int">
 		SELECT COUNT(*)
 		FROM mvc_board
-		<include refid="search"/>
-		<!-- 원하는 위치에 직접 동적 sql문을 삽입하는 방식
-			<if test="condition == 'title'">WHERE title LIKE '%'||#{keyword}||'%'</if>
-			<if test="condition == 'writer'">WHERE writer LIKE '%'||#{keyword}||'%'</if>
-			<if test="condition == 'content'">WHERE content LIKE '%'||#{keyword}||'%'</if>
-			<if test="condition == 'titleContent'">WHERE title LIKE '%'||#{keyword}||'%'
+		<!-- 원하는 위치에 직접 동적 sql문을 삽입하는 방식 
+		<if test="condition == 'title'">WHERE title LIKE '%'||#{keyword}||'%'</if>
+		<if test="condition == 'writer'">WHERE writer LIKE '%'||#{keyword}||'%'</if>
+		<if test="condition == 'content'">WHERE content LIKE '%'||#{keyword}||'%'</if>
+		<if test="condition == 'titleContent'">WHERE title LIKE '%'||#{keyword}||'%'
 							OR content LIKE '%'||#{keyword}||'%'</if>
-		 -->
-		 <!-- 
-		 <choose>
-		 	<when test="">~~~</when>
-		 	<when test="">~~~</when>
-		 </choose>
-		  -->
+		-->
+		<!-- 
+		<choose>
+			<when test="">~~~</when>
+			<when test="">~~~</when>
+			<when test="">~~~</when>
+			<when test="">~~~</when>
+			<otherwise></otherwise>
+		</choose> -->
+		<include refid="search" />
 	</select>
+	
 	
 	<select id="getArticle" resultMap="BoardMap">
 		SELECT * FROM mvc_board

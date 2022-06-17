@@ -39,6 +39,7 @@
 								<p><strong>비밀번호를 입력해주세요.</strong>&nbsp;&nbsp;&nbsp;<span id="pwCheck"></span></p>
 							</td>
 						</tr>
+
 						<tr>
 							<td><input type="password" size="17" maxlength="20" id="signInPw"
 								name="userPw" class="form-control tooltipstered" 
@@ -46,6 +47,10 @@
 								style="ime-mode: inactive; margin-bottom: 25px; height: 40px; border: 1px solid #d9d9de"
 								placeholder="최소 8자"></td>
 						</tr>
+												
+						<!-- 자동 로그인 체크박스 -->
+						<tr>
+							<td><input type="checkbox" id="auto-login" name="autologin">자동로그</td>
 						<tr>
 							<td style="padding-top: 10px; text-align: center">
 								<p><strong>로그인하셔서 더 많은 서비스를 이용하세요~</strong></p>
@@ -407,9 +412,14 @@
 		            const id = $('#signInId').val();
 					const pw = $('#signInPw').val();
 					
+					//자동 로그인 체크박스가 체크가 되었는지의 여부
+					//is()함수는 상태 여부를 판단하여 논리값을 리턴합니다.
+					const autoLogin = $('#auto-login').is(':checked');
+					
 					const userInfo = {
 						"account" : id,
 						"password" : pw
+						"autoLogin" : autoLogin
 					};
 					
 					$.ajax({

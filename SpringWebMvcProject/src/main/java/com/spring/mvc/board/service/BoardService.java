@@ -35,7 +35,6 @@ public class BoardService implements IBoardService {
 		data.put("keyword", keyword);
 		*/
 		
-		
 		List<BoardVO> list = mapper.getArticleList(search);
 		
 		for(BoardVO article : list) {
@@ -46,6 +45,7 @@ public class BoardService implements IBoardService {
 				article.setNewMark(true);
 			}
 		}
+		
 		return list;
 	}
 
@@ -68,13 +68,6 @@ public class BoardService implements IBoardService {
 	public int countArticles(SearchVO search) {
 		return mapper.countArticles(search);
 	}
+	
 
 }
-
-
-
-
-
-
-
-

@@ -29,6 +29,26 @@
 	
 	<context:component-scan base-package="com.spring.mvc" />
 	
+	<!-- 인터셉터 빈 등록 양식 -->
+	<beans:bean id="boardInterceptor" class="com.spring.mvc.board.commons.interceptor."/>
+	
+	<interceptors>
+		<interceptor>
+			<!-- <mapping path="/board/**"/>  -->
+			<mapping path="/board/write"/>
+			<mapping path="/board/content/**"/>
+			<beans:ref bean="boardInterceptor"/>
+			<!--  <beans:bean class-"com.spring.mvc.board.commons.interceptor.BoardInterceptor/> -->
+		</interceptor>
+	</interceptors>
+	
+	<interceptors>
+		<interceptor>
+			<mapping path="/"/>
+			<beans:bean class="com.spring.mvc.user.commons.interceptor.AutoLoginInterceptor"/>
+		</interceptor>
+	</interceptors>
+	
 	
 	
 </beans:beans>
