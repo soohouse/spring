@@ -41,7 +41,7 @@
                         <div class="collapse navbar-collapse" id="myNavbar">
                             <ul class="nav navbar-nav">
                                 <li class="active"><a href="<c:url value='/' />">Main</a></li>
-                                <li><a href="<c:url value='/freeBoard/freeList' />">자유게시판</a></li>
+                                <li><a href="<c:url value='/freeboard/freeList' />">자유게시판</a></li>
                                 <!-- 
 				<li><a href="#">강의</a></li>
                                 <li><a href="#">Form</a></li>

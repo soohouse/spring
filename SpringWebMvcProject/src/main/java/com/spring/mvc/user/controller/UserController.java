@@ -1,8 +1,7 @@
 package com.spring.mvc.user.controller;
 
-import java.sql.Date;
+import java.util.Date;
 
-import javax.jws.soap.SOAPBinding.Use;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -21,17 +21,16 @@ import org.springframework.web.util.WebUtils;
 import com.spring.mvc.user.model.UserVO;
 import com.spring.mvc.user.service.IUserService;
 
-import oracle.jdbc.proxy.annotation.Post;
-
 /*
  만약에 컨트롤러에 비동기 통신 요청을 받는 메서드가 있다고 해서
- 무조건 그 컨트롤러가 restController일 필요는 없습니다.
+ 무조건 그 컨트롤러는 restController일 필요는 없습니다.
  일반 컨트롤러에도 @ResponseBody가 붙은 메서드가 있으면
  클라이언트로 값을 바로 리턴할 수 있습니다.
  @RestController는 스프링 4부터 가능한 문법입니다.
  */
 
 @RestController
+@RequestMapping("/user")
 public class UserController {
 	
 	@Autowired
@@ -61,25 +60,26 @@ public class UserController {
 		service.register(vo);
 		return "joinSuccess";
 	}
-	
+
 	//로그인 요청 처리
 	@PostMapping("/loginCheck")
 	public String loginCheck(@RequestBody UserVO vo, /*HttpServletRequest request*/
-							HttpSession session,
-							HttpServletResponse response) {
+								HttpSession session,
+								HttpServletResponse response) {
 		System.out.println("/user/loginCheck: POST");
 		System.out.println("param: " + vo);
 		
 		//서버에서 세션 객체를 얻는 방법
-		//HttpServletRequest 객체 사용
+		//1. HttpServletRequest 객체 사용
 		//HttpSession session = request.getSession();
 		
 		//2. 매개값으로 HttpSession 객체 받아서 사용.
 		
+		
 		UserVO dbData = service.selectOne(vo.getAccount());
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		
-		if(dbData !=null) {
+		if(dbData != null) {
 			if(encoder.matches(vo.getPassword(), dbData.getPassword())) {
 				//로그인 성공 회원을 대상으로 세션 정보를 생성
 				session.setAttribute("login", dbData);
@@ -104,7 +104,7 @@ public class UserController {
 					
 					System.out.println("자동 로그인 만료 시간: " + limitDate);
 					
-					service.keepLogin(session.getId(), limitTime, vo.getAccount());
+					service.keepLogin(session.getId(), limitDate, vo.getAccount());
 				}
 				
 				return "loginSuccess";
@@ -119,37 +119,38 @@ public class UserController {
 	//로그아웃 처리
 	@GetMapping("/logout")
 	public ModelAndView logout(HttpSession session, RedirectAttributes ra,
-								HttpServletRequest request,
-								HttpServletResponse response) {
+							   HttpServletRequest request,
+							   HttpServletResponse response) {
 		System.out.println("/user/logout: GET");
 		
 //		session.invalidate();
 		UserVO user = (UserVO) session.getAttribute("login");
 		
-		session.removeAttribute("login");//로그인이라는 데이터를 지워라
+		session.removeAttribute("login");
 		
-		/*
-		 자동 로그인 쿠키가 있는지를 확인(없는 사람도 있으니까요) 
-		 쿠키가 존재한다면 쿠키의 수명을 0
-		 쿠키를 지우실 때도 setPath를 동일하게 지정해 주어야 합니다.
-		 DB의 내용도 바꿔주셔야 합니다.
-		 세션ID: 'none', 만료시간: 지금 이 시간 ->
-		 */
+		 /*
+		  자동 로그인 쿠키가 있는지를 확인(없는 사람도 있으니까요)
+		  쿠키가 존재한다면 쿠키의 수명을 0
+		  쿠키를 지우실 때도 setPath를 동일하게 지정해 주어야 합니다.
+		  DB의 내용도 바꿔 주셔야 합니다.
+		  세션ID: 'none', 만료시간: 지금 이 시간 -> 
+		  */
 		
 		Cookie loginCookie = WebUtils.getCookie(request, "loginCookie");
 		if(loginCookie != null) {
 			loginCookie.setMaxAge(0);
 			loginCookie.setPath("/");
 			response.addCookie(loginCookie);
-			service.keepLogin("none", new Date, user.getAccount());
+			service.keepLogin("none", new Date(), user.getAccount());
 		}
 		
 		ra.addFlashAttribute("msg", "logout");
 		
 //		ModelAndView mv = new ModelAndView();
-//		mv.setViewName(("/");
+//		mv.setViewName("/");
 		
 		return new ModelAndView("redirect:/");
 	}
-
+	
+	
 }

@@ -7,16 +7,20 @@
 		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
 
-	<!-- 자동으로 컨트롤러와 매핑 메서드 탐색 (핸들러 매핑, 핸들러 어댑터 빈 등록)-->
+	<!-- 자동으로 컨트롤러와 매핑 메서드 탐색 (핸들러 매핑, 핸들러 어댑터 빈 등록) -->
 	<annotation-driven />
 
-	<!-- css, img, js...의 파일 경로가 복잡할 때 많이 사용합니다. -->
+	<!-- css, img, js... 의 파일 경로가 복잡할 때 많이 사용합니다. -->
 	<!-- jsp 파일 같은 데서 경로 긴거 일일히 쓰기 귀찮잖아요. 그래서 선언합니다. -->
 	<!-- 내부 경로를 숨겨주는 역할도 해요. -->
 	<resources mapping="/resources/**" location="/resources/" />
+	<resources mapping="/img/**" location="/resources/img/" />
+	<resources mapping="/css/**" location="/resources/css/" />
+	<resources mapping="/fonts/**" location="/resources/fonts/" />
+	<resources mapping="/js/**" location="/resources/js/" />
 
-	<!--
-		컨트롤러가 리턴한 문자열 앞, 뒤에 적잘한 경로를 붙여서
+	<!-- 
+		컨트롤러가 리턴한 문자열 앞, 뒤에 적절한 경로를 붙여서
 		화면을 응답할 수 있도록 도와주는 뷰 리졸버~
 	 -->
 	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">

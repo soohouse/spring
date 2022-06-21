@@ -1,6 +1,7 @@
 package com.spring.mvc.user.service;
 
-import java.sql.Date;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,8 +34,8 @@ public class UserService implements IUserService {
 		System.out.println("암호화 후 비번: " + securePw);
 		user.setPassword(securePw);
 		
+		
 		mapper.register(user);
-
 	}
 
 	@Override
@@ -51,9 +52,13 @@ public class UserService implements IUserService {
 	@Override
 	public void keepLogin(String session, Date limitTime, String account) {
 		
-
+		Map<String, Object> data = new HashMap<>();
+		data.put("sessionId", session);
+		data.put("limitDate", limitTime);
+		data.put("account", account);
+		
+		mapper.keepLogin(data);
 		
 	}
-	
 
 }
