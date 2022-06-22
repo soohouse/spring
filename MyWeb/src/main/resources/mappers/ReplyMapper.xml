@@ -38,5 +38,21 @@
   		FROM freereply
   		WHERE bno = #{bno}
   	</select>
+  	
+  	<select id="pwCheck" resultType="int">
+  		SELECT COUNT(*) FROM freereply
+  		WHERE rno = #{rno} AND reply_pw = #{replyPw}
+  	</select>
+  	
+  	<update id="update">
+  		UPDATE reply
+  		SET reply=#{reply}, update_date = sysdate
+  		WHERE rno = #{rno}
+  	</update>
+  	
+  	<delete id="delete">
+  		DELETE FROM reply
+  		WHERE rno = #{rno}
+  	</delete>
   
   </mapper>

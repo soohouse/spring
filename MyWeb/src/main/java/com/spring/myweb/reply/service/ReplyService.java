@@ -40,19 +40,18 @@ public class ReplyService implements IReplyService {
 
 	@Override
 	public int pwCheck(ReplyVO vo) {
-		// TODO Auto-generated method stub
-		return 0;
+		return mapper.pwCheck(vo);
 	}
 
 	@Override
 	public void update(ReplyVO vo) {
-		// TODO Auto-generated method stub
+		mapper.update(vo);
 
 	}
 
 	@Override
 	public void delete(int rno) {
-		// TODO Auto-generated method stub
+		mapper.delete(rno);
 
 	}
 

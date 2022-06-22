@@ -1,6 +1,7 @@
 ﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
+<%@ include file="../include/header.jsp" %>
     <section>
         <div class="container">
             <div class="row">
@@ -14,10 +15,10 @@
                             <div class="input-group"><!--input2탭의 input-addon을 가져온다 -->
                                 <input type="text" class="form-control" id="userId" placeholder="아이디를 (영문포함 4~12자 이상)">
                                 <div class="input-group-addon">
-                                    <button type="button" class="btn btn-primary">아이디중복체크</button>
+                                    <button type="button" class="btn btn-primary" id="idCheckBtn">아이디중복체크</button>
                                 </div>
                             </div>
-                            <span id="msgId"></span><!--자바스크립트에서 추가-->
+                            <span id="msgId">*필수 사항입니다.</span><!--자바스크립트에서 추가-->
                         </div>
                         <div class="form-group"><!--기본 폼그룹을 가져온다-->
                             <label for="password">비밀번호</label>
@@ -44,13 +45,12 @@
 					<option>018</option>
 				</select> 
 				<input type="text" class="form-control phone2" id="userPhone2" placeholder="휴대폰번호를 입력하세요.">
-                                <div class="input-group-addon">
-                                    <button type="button" class="btn btn-primary">본인인증</button>
-                                </div>
+                                
                             </div>
                         </div>
 			<div class="form-group email-form">
 			  <label for="email">이메일</label><br>
+			  <div class="input-group">
 			  <input type="text" class="form-control" id="userEmail1" placeholder="이메일">
 			  <select class="form-control" id="userEmail2">
 			    <option>@naver.com</option>
@@ -59,6 +59,14 @@
 			    <option>@hanmail.com</option>
 			    <option>@yahoo.co.kr</option>
 			  </select>
+			  <div class="input-group-addon">
+                 <button type="button" id="mail-check-btn" class="btn btn-primary">이메일인증</button>
+              </div>
+              </div>
+              <div class="mail-check-box">
+              	<input type="text" class="form-control mail-check-input" placeholder="인증번호 6자리를 입력하세요." maxlength="6" disabled="disabled">
+              	<span id="mail-check-warn"></span>
+              </div>
 			</div>
                         <!--readonly 속성 추가시 자동으로 블락-->
                         <div class="form-group">
@@ -66,7 +74,7 @@
                             <div class="input-group">
                                 <input type="text" class="form-control" id="addrZipNum" placeholder="우편번호" readonly>
                                 <div class="input-group-addon">
-                                    <button type="button" class="btn btn-primary">주소찾기</button>
+                                    <button type="button" class="btn btn-primary" onclick="searchAddress()">주소찾기</button>
                                 </div>
                             </div>
                         </div>
@@ -90,8 +98,131 @@
             </div>
         </div>
     </section>
+    
+    
+    <%@ include file="../include/footer.jsp" %>
+
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
     <script>
+    
+    	$(function() {
+    		
+    		let code = ''; //이메일 전송 인증번호 저장을 위한 변수.
+			
+    		//아이디 중복 체크
+    		$('#idCheckBtn').click(function() {
+				
+    			//아이디값을 받아와서 비동기 통신을 통해 서버와 통신하고
+                // 중복되었다면 '중복된 아이디입니다.',
+                //아니라면 '사용 가능한 아이디입니다' 라고
+                //화면에 띄워주시면 되겠습니다.
+                //attr()를 이용해서 readonly 속성을 true를 주어서 작성하지 못하도록.
+                
+                const userId = $('#userId').val();
+    			
+    			if(userId === '') {
+    				alert('아이디는 필수값입니다.');
+    				return;
+    			}
+    			
+    			$.ajax({
+    				type: 'post',
+    				url: '<c:url value="/user/idCheck"/>',
+    				data: userId,
+    				contentType: 'application/json',
+    				success: function(data) {
+						if(data === 'ok') {
+							$('#userId').attr("readonly", true);
+							$('#msgId').html('사용 가능한 아이디입니다.');
+						} else {
+							$('#msgId').html('중복된 아이디입니다.');
+						}
+					},
+					error: function() {
+						alert('서버 에러입니다. 관리자에게 문의하세요.');
+					}
+    			
+    			}); //중복확인 비동기 통신 끝
+      			
+  
+    			
+			}); //아이디 중복 체크 끝.
+			
+			//인증번호 이메일 전송
+			$('#mail-check-btn').click(function() {
+				const email = $('#userEmail1').val() + $('#userEmail2').val();
+				console.log('완성된 이메일: ' + email);
+				
+				$.ajax({
+					type: 'get',
+					url: '<c:url value="/user/mailCheck?email=" />' +email,
+					success: function(data) {
+						console.log('컨트롤러가 전달한 인증번호: ' + data);
+						$('.mail-check-input').attr('disabled', false); //비활성된 인증번호 입력창 활성화
+						code = data;
+						alert('인증번호가 전송되었습니다. 확인 후 입력란에 정확하게 입력하세요.');
+					}		
+				}); //end ajax(이메일 전송)
+			}); //이메일 전송 끝.
+    		
+			//인증번호 비교
+			//blur -> focus가 벗어나는 경우 발생
+			$('.mail-check-input').blur(function() {
+				const inputCode = $(this).val();
+				const $resultMsg = $('#mail-check-warn');
+				
+				if(inputCode === code) {
+					$resultMsg.html('인증번호가 일치합니다.');
+					$resultMsg.css('color', 'green');
+					$('#mail-check-btn').attr('disabled', true); //이메일 인증 못하게 버튼 비활성.
+					$('#userEmail1').attr('readonly', true);
+					//$('#userEmail2').attr('readonly', true);
+					
+					//초기값을 사용자가 선택한 값으로 무조건 설정하는 방법.(select에서 readonly 대용)
+					$('#userEmail2').attr('onFocus', 'this.initialSelect = this.selectedIndex');
+		            $('#userEmail2').attr('onChange', 'this.selectedIndex = this.initialSelect');
+				} else {
+					$resultMsg.html('인증번호를 다시 확인해 주세요.');
+					$resultMsg.css('color', 'red');
+				}
+				
+			}); //인증번호 이벤트 끝.
+			
+			//폼 데이터 검증 ( 회원 가입 버튼 눌렀을 시 )
+			/*
+				아이디 중복 체크를 했는지의 여부.(아이디 입력창이 readonly인지 확인.)
+				비밀번호 확인란이 제대로 인식이 됐는지의 여부.
+				이름란이 공백이 아닌지를 확인.
+				(이메일 인증, 주소는 필수값이 아니기 때문에 확인 안하겠습니다.)
+				문제가 없다면 폼 데이터 submit으로 처리하세요.
+			*/
+		
+    		
+		}); //end jQuery
+		
+		/*
+		function goPopup(){
+			//주소찾기 버튼을 누르면 절대경로로 팝업창을 오픈.
+			var pop = window.open("${pageContext.request.contextPath}/resources/popup/jusoPopup.jsp","pop","width=570,height=420, scrollbars=yes, resizable=yes"); 
+
+		}
+
+
+		function jusoCallBack(roadFullAddr,roadAddrPart1,addrDetail,roadAddrPart2,engAddr, jibunAddr, zipNo, admCd, rnMgtSn, bdMgtSn,detBdNmList,bdNm,bdKdcd,siNm,sggNm,emdNm,liNm,rn,udrtYn,buldMnnm,buldSlno,mtYn,lnbrMnnm,lnbrSlno,emdNo){
+				//콜백 방식으로 받아온 데이터를 가입 폼에 자동 완성.
+				document.getElementById('addrBasic').value = roadAddrPart1;
+				document.getElementById('addrDetail').value = addrDetail;
+				document.getElementById('addrZipNum').value = zipNo;
+				
+		}
+		*/
+		
+		//다음 주소api 사용해 보기
+		
+    
+    
+    
         /*아이디 형식 검사 스크립트*/
         var id = document.getElementById("userId");
         id.onkeyup = function() {

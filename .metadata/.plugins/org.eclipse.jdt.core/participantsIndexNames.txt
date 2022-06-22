@@ -37,3 +37,5 @@ INDEX VERSION 1.131
 /SpringDBAccess/src/main/java
 /Users/dood/Desktop/java_web_JS/spring_basic/.metadata/.plugins/org.eclipse.jst.jsp.core/jspsearch/3338480687.index
 /SpringDBAccess/src/main/java
+/Users/dood/Desktop/java_web_JS/spring_basic/.metadata/.plugins/org.eclipse.jst.jsp.core/jspsearch/750491819.index
+/MyWeb/src/main/java

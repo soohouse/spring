@@ -10,11 +10,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>인덱스를 만들어 보자</title>
-    
-    <%--
-    	${pageContext.request.contextPath} == <c:url value=''/>
-     --%>
 
+	<%-- 
+		${pageContext.request.contextPath} == <c:url value='' />
+	 --%>
     <link href="${pageContext.request.contextPath }/resources/css/bootstrap.css" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <!--개인 디자인 추가-->
@@ -54,7 +53,7 @@
                                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">로그인
                                         <span class="caret"></span></a>
                                     <ul class="dropdown-menu">
-                                        <li><a href="#"><span class="glyphicon glyphicon-user"></span>Join</a></li>
+                                        <li><a href="<c:url value='/user/userJoin' />"><span class="glyphicon glyphicon-user"></span>Join</a></li>
                                         <li><a href="#"><span class="glyphicon glyphicon-log-in"></span>Login</a></li>
                                         <li><a href="#"><span class="glyphicon glyphicon-user"></span>MyPage</a></li>
                                         <li><a href="#"><span class="glyphicon glyphicon-log-out"></span>Logout</a></li>

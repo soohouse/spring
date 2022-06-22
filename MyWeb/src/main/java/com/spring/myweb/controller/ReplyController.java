@@ -17,6 +17,8 @@ import com.spring.myweb.command.ReplyVO;
 import com.spring.myweb.reply.service.IReplyService;
 import com.spring.myweb.util.PageVO;
 
+import oracle.security.crypto.fips.RNGTest;
+
 @RestController
 @RequestMapping("/reply")
 public class ReplyController {
@@ -59,5 +61,35 @@ public class ReplyController {
 		map.put("total", total);
 		
 		return map;
+		
+	}
+	
+	//댓글 수정
+	@PostMapping("/update")
+	public String update(@RequestBody ReplyVO vo) {
+		//System.out.println("댓글 수정 요청이 들어옴!");
+		//비밀번호 확인
+		int result = service.pwCheck(vo);
+		
+		if(result == 1) { //비밀번호가 맞는 경우
+			service.update(vo);
+			return "modSuccess";
+		} else {
+			return "pwFail";
+		}
+
+	}
+	
+	//댓글 삭제
+	@PostMapping("/delete")
+	public String delete(@RequestBody ReplyVO vo) {
+		int result = service.pwCheck(vo);
+		
+		if(result == 1 ) {
+			service.delete(vo.getRno());
+			return "delSuccess";
+		} else {
+			return "pwFail";
+		}
 	}
 }
