@@ -11,6 +11,18 @@
   		SELECT COUNT(*) FROM users
    		WHERE userId = #{id}
   	</select>
+  	
+  	<select id="join">
+  		INSERT INTO users
+  		(userId, userPw, userName, userPhone1, userPhone2, userEmail1, userEmail2, addrBasic, addrDetail, addrZipNum)
+  		VALUES(#{userId}, #{userPw} ,#{userName},#{userPhone1},#{userPhone2},#{userEmail1},#{userEmail2},#{addrBasic},#{addrDetail},#{addrZipNum})
+  	</select>
+  	
+  	<select id="login" resultType="user">
+  		SELECT * FROM users
+  		WHERE userId = #{id}
+  		AND userPw = #{pw}
+  	</select>
   
   </mapper>
   

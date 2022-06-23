@@ -34,7 +34,16 @@
 		하위 패키지까지 몽땅 검색해 줍니다.
 	 -->
 	<context:component-scan base-package="com.spring.myweb" />
-	
-	
-	
+
+<!-- 
+	<interceptors>
+		<interceptor>
+			<mapping path=""/>
+			<mapping path=""/>
+			<beans:bean class="~~~"/>
+		</interceptor>
+	</interceptors>
+ -->
+ 
+ 
 </beans:beans>

@@ -38,15 +38,18 @@
 	<!-- 마이바티스 SQL 동작을 위한 핵심 객체 SqlSessionFactory 클래스 빈 등록 -->
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="ds" />
-		<property name="mapperLocations" value="classpath:/mappers/*.xml" />
- 	</bean>
+		
+ 	
 		<!-- 		
 			마이바티스 같은 경우는 mapper 구현체를 xml로 대체하니까
 			해당 구현체 xml 파일의 경로를 알려줘야 한다.
 			와일드카드 매핑을 이용해서 규칙을 설정.
-		 -->	
+		 -->
+		 <property name="configLocation" value="mybatis-config.xml"/>	
+		<property name="mapperLocations" value="classpath:/mappers/*.xml" />
+		
  	
- 	
+ 	</bean>
  
 	
 	<!-- 지정한 패키지를 스캔하여 존재하는 mapper 인터페이스를 빈 타입으로 등록.
