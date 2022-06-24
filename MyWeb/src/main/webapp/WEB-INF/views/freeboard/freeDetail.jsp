@@ -39,7 +39,7 @@
                                 <textarea class="form-control" rows="10" name='##' readonly>${article.content}</textarea>
                             </div>
 
-                            <button type="button" class="btn btn-primary" onclick="location.href='<c:url value="/freeboard/freeModify?bno=${article.bno}" />'">변경</button>
+                            <button type="button" class="btn btn-primary" onclick="location.href='<c:url value="/freeboard/freeModify?bno=${article.bno}&writer=${article.writer}"/>'">변경</button>
                             <button type="button" class="btn btn-dark" onclick="location.href='${pageContext.request.contextPath}/freeboard/freeList?pageNum=${p.pageNum}&cpp=${p.cpp}&condition=${p.condition}&keyword=${p.keyword}'">목록</button>
                     </form>
                 </div>

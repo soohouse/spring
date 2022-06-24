@@ -1,4 +1,4 @@
 #Tomcat publish data
-#Thu Jun 23 12:07:02 KST 2022
+#Fri Jun 24 15:35:19 KST 2022
 org.eclipse.jst.jee.server\:MyWeb=/Users/dood/Desktop/java_web_JS/apache-tomcat-9.0.62/wtpwebapps/MyWeb
 org.eclipse.jst.jee.server\:/binary\:/Users/dood/.m2/repository/org/springframework/spring-web/5.3.18/spring-web-5.3.18.jar=/Users/dood/Desktop/java_web_JS/apache-tomcat-9.0.62/wtpwebapps/MyWeb/WEB-INF/lib/spring-web-5.3.18.jar
