@@ -7,7 +7,6 @@
 	</configSuffixes>
 	<enableImports><![CDATA[true]]></enableImports>
 	<configs>
-		<config>src/main/webapp/WEB-INF/config/email-config.xml</config>
 		<config>src/main/webapp/WEB-INF/config/interceptor-config.xml</config>
 	</configs>
 	<autoconfigs>
