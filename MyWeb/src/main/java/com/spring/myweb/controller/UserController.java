@@ -99,7 +99,7 @@ public class UserController {
 	
 	//수정 로직
 	@PostMapping("/userUpdate")
-	public String userUpdate(UserVO vo,RedirectAttributes ra) {
+	public String userUpdate(UserVO vo, RedirectAttributes ra) {
 		System.out.println("param: " + vo);
 		service.updateUser(vo);
 		
@@ -113,4 +113,23 @@ public class UserController {
 	
 	
 	
+	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

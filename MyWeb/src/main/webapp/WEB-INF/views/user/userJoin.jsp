@@ -1,5 +1,6 @@
 ﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 	<%@ include file="../include/header.jsp" %>
 
@@ -11,7 +12,7 @@
                     <div class="titlebox">
                        	 회원가입
                     </div>
-                    <form action="<c:url value='/user/join'/>" method="post" id="joinForm">
+                    <form action="<c:url value='/user/join' />" method="post" id="joinForm">
                         <div class="form-group"><!--사용자클래스선언-->
                             <label for="id">아이디</label>
                             <div class="input-group"><!--input2탭의 input-addon을 가져온다 -->
@@ -34,27 +35,27 @@
                         </div>
                         <div class="form-group">
                             <label for="name">이름</label>
-                            <input type="text" class="form-control" name="userName" id="userName" placeholder="이름을 입력하세요.">
+                            <input type="text" name="userName" class="form-control" id="userName" placeholder="이름을 입력하세요.">
                         </div>
                         <!--input2탭의 input-addon을 가져온다 -->
                         <div class="form-group">
                             <label for="hp">휴대폰번호</label>
                             <div class="input-group">
-				<select class="form-control phone1" name="userPhone1" id="userPhone1">
+				<select name="userPhone1" class="form-control phone1" id="userPhone1">
 					<option>010</option>
 					<option>011</option>
 					<option>017</option>
 					<option>018</option>
 				</select> 
-				<input type="text" class="form-control phone2" name="userPhone2" id="userPhone2" placeholder="휴대폰번호를 입력하세요.">
+				<input type="text" name="userPhone2" class="form-control phone2" id="userPhone2" placeholder="휴대폰번호를 입력하세요.">
                                 
                             </div>
                         </div>
 			<div class="form-group email-form">
 			  <label for="email">이메일</label>
 			  <div class="input-group">
-				  <input type="text" class="form-control" name="userEmail1" id="userEmail1" placeholder="이메일">
-				  <select class="form-control" id="userEmail2">
+				  <input type="text" name="userEmail1" class="form-control" id="userEmail1" placeholder="이메일">
+				  <select name="userEmail2" class="form-control" id="userEmail2">
 				    <option>@naver.com</option>
 				    <option>@daum.net</option>
 				    <option>@gmail.com</option>
@@ -82,15 +83,15 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <input type="text" class="form-control" name="addrBasic" id="addrBasic" placeholder="기본주소">
+                            <input type="text" name="addrBasic" class="form-control" id="addrBasic" placeholder="기본주소">
                         </div>
                         <div class="form-group">
-                            <input type="text" class="form-control" name="addrDetail" id="addrDetail" placeholder="상세주소">
+                            <input type="text" name="addrDetail" class="form-control" id="addrDetail" placeholder="상세주소">
                         </div>
 
                         <!--button탭에 들어가서 버튼종류를 확인한다-->
                         <div class="form-group">
-                            <button type="button" class="btn btn-lg btn-success btn-block">회원가입</button>
+                            <button type="button" id="joinBtn" class="btn btn-lg btn-success btn-block">회원가입</button>
                         </div>
 
                         <div class="form-group">
@@ -184,6 +185,7 @@
 					$(this).css('display', 'none');
 					
 					//초기값을 사용자가 선택한 값으로 무조건 설정하는 방법.(select에서 readonly 대용)
+					//2개 같이 쓰셔야 해요.
 					$('#userEmail2').attr('onFocus', 'this.initialSelect = this.selectedIndex');
 					$('#userEmail2').attr('onChange', 'this.selectedIndex = this.initialSelect');
 				} else {
@@ -201,12 +203,11 @@
 				(이메일 인증, 주소는 필수값이 아니기 때문에 확인 안하겠습니다.)
 				문제가 없다면 폼 데이터 submit으로 처리하세요.
 			*/
-			
 			$('#joinBtn').click(function() {
-				if(!$('#userId').attr('readonly')){
+				if(!$('#userId').attr('readonly')) {
 					alert('아이디 중복체크는 필수입니다.');
 					return;
-				} else if($('userPw').val() !== $('#userPw').val() !==$('#pwConfirm').val()) {
+				} else if($('#userPw').val() === '' || $('#userPw').val() !== $('#pwConfirm').val()) {
 					alert('비밀번호 규칙을 확인하세요.');
 					$('#userPw').focus();
 					return;
@@ -218,6 +219,11 @@
 					$('#joinForm').submit();
 				}
 			});
+			
+			
+			
+			
+			
     		
 		}); // end jQuery
 		
