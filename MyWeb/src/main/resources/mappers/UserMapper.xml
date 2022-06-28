@@ -70,7 +70,7 @@
 	</select>
 	
 	<update id="updateUser">
-		SELECT users
+		UPDATE users
 		SET userPw = #{userPw}, userName = #{userName},
 		userEmail1 = #{userEmail1}, userEmail2 = #{userEmail2},
 		userPhone1 = #{userPhone1}, userPhone2 = #{userPhone2},
@@ -80,5 +80,16 @@
 	</update>
 
 </mapper>
-  
- 
+
+
+
+
+
+
+
+
+
+
+
+
+

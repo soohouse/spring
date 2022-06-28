@@ -236,6 +236,7 @@
 						목록을 만들어서 붙일 영역. -->
 						
 				</div>
+				</div>
 				<!--우측 어사이드-->
 				<aside class="col-sm-2">
 					<div class="aside-inner">
@@ -380,7 +381,7 @@
 			}
 			
 			$.getJSON(
-				'<c:url value="/snsBoard/getList?pageNum='+page'"/>',
+				'<c:url value="/snsBoard/getList?pageNum='+ page +'"/>',
 				function(list) {
 					console.log(list);
 					
@@ -394,17 +395,19 @@
 							</div>
 							<div class="title">
 								<p>`+ list[i].writer + `</p>
-								<small>21시간</small>
+								<small>`+ timeStamp(list[i].regdate) + `</small> &nbsp;&nbsp;
+								<a href="">이미지 다운로드</a>
 							</div>
 						</div>
 						<div class="content-inner">
 							<!--내용영역-->
-							<p>삶이 우리를 끝없이 시험하기에 고어텍스는 한계를 테스트합니다</p>
+							<p>`+ (list[i].content === null ? '':list[i].content) + `</p>
 						</div>
 						<div class="image-inner">
 							<!-- 이미지영역 -->
-							<img src="../resources/img/facebook.jpg">
-							
+							<a href="`+list[i].bno + `">
+							<img src="c:url value='/snsBoard/display?fileLoca=` + list[i].fileloca +`&fileName` + list[i].fileName +'/>">
+							</a>
 						</div>
 						<div class="like-inner">
 							<!--좋아요-->
@@ -413,20 +416,120 @@
 						<div class="link-inner">
 							<a href="##"><i class="glyphicon glyphicon-thumbs-up"></i>좋아요</a>
 							<a href="##"><i class="glyphicon glyphicon-comment"></i>댓글달기</a> 
-							<a href="##"><i class="glyphicon glyphicon-remove"></i>삭제하기</a>
+							<a href="` + list[i].bno + `"><i class="glyphicon glyphicon-remove"></i>삭제하기</a>
 						</div>
-						</div>`
+						`;
+						$('#contentDiv').html(str);
 					
-					}
+					} //end for
+				}
+			); //end getJSON
+			
+		} //end getList()
+		
+		//상세보기 처리(모달창 열어줄 겁니다.)
+		$('#contentDiv').on('click', 'image-inner a', function(e) {
+			e.preventDefault(); //a의 고유 기능 중지.
+			
+			//글 번호 얻어오기
+			const bno = $(this).attr('href');
+			
+			$.getJSON(
+				'<c:url value="/snsBoard/getDetail/" />' + bno,
+				function(data) {
+					console.log(data);
+					
+					//미리 준비한 모달창에 뿌릴 겁니다. (모달 위에 있어요.)
+					//값을 제 위치에 잘 뿌려주시고 모달을 열어주세요.
+					const src = '<c:url value="/snsBoard/display?fileLoca=' + data.fileLoca +'&fileName=' + data.filename +'"/>'
+					$('#snsImg').attr('src', src);
+					$('#snsWriter').html(data.writer); //작성자 처리
+					$('#snsRegdate').html(timeStamp(data.regdate)); //날짜 처리
+					$('#snsContent').html(data.content); //내용처리
+					$('#snsModal').modal('show'); //모달 열기
 				}
 			);
 			
-		} //end getList
+		}); //상세보기 처리 끝.
 		
-		
+						//삭제 처리
+						//삭제하기 링크를 클릭했을 때 이벤트를 발생 시켜서
+						//비동기 방식으로 삭제를 진행해 주세요. (삭제 버튼은 한 화면에 여러개 겠죠?)
+						//서버쪽에서 권한을 확인 해 주세요. (작성자와 로그인 중인 사용자의 id를 비교해서)
+						//일치하지 않으면 문자열 "noAuth" 리턴, 성공하면 "Success" 리턴.
+						// url: /snsBoard/delete, method: post
+						
+						$('#contentDiv').on('click', '.link-inner a', function(e) {
+							e.preventDefault();
+							
+							const bno = $(this).attr('href');
+							
+							$.ajax({
+								type: 'post',
+								url: '<c:url value="/snsBoard/delete" />',
+								data: bno,
+								contentType: 'application/json',
+								success: function(result) {
+									if(result === 'noAuth') {
+										alert('권한이 없습니다.');
+									} else if(result === 'fail') {
+										alert('삭제에 실패했습니다. 관리자에게 문의하세요.');
+									} else {
+										alert('게시물이 정상적으로 삭제되었습니다.');
+										getList(1, true); //삭제가 반영된 글 목록을 새롭게 보여줘야 하기 때문에 리셋 여부를 true
+									}
+								},
+								error: function() {
+									alert('삭제에 실패했습니다. 관리자에게 문의 해 주세요.');
+								}
+							}); //end ajax
+							
+						}); //삭제 처리 끝.
+						
+						
+						//무한 스크롤
+						$(window).scroll(function() {
+							//윈도우(device)의 높이와 현재 스크롤 위치 값을 더한 뒤, 
+							//문서(컨텐츠)의 높이와 비교해서 같다면 로직을 수행.
+							//문서 높이 - 브라우저 창 높이 = 스크롤 창의 끝 높이와 같다면 -> 새로운 내용을 불러오자.
+							if(Math.round($(window).scrollTop()) === $(document).height() - $(window).height()) {
+								//사용자의 스크롤이 바닥에 닿았을 때, 페이지 변수의 값을 하나 올리고
+								//reset 여부는 false를 주셔서 누적해서 계속 불러 오시면 됩니다.
+								//게시글을 몇 개씩 불러 올지는 페이징 알고리즘에서 정해 주시면 됩니다.
+								getList(++page, false);
+							}
+							
+						});
+	      
 		
 		
 	}); //end jQuery
+	
+		//날짜 처리 함수
+         function timeStamp(millis) {
+            const date = new Date(); //현재 날짜
+            //현재 날짜를 밀리초로 변환 - 등록일 밀리초 -> 시간 차
+            const gap = date.getTime() - millis;
+            
+            let time; //리턴할 시간
+            if(gap < 60 * 60 * 24 * 1000) { //1일 미만일 경우
+               if(gap < 60 * 60 * 1000) { //1시간 미만일 경우
+                  time = '방금 전';
+               } else {
+                  time = parseInt(gap / (1000 * 60 * 60)) + '시간 전';
+               }
+            } else { //1일 이상일 경우
+               const today = new Date(millis);
+               const year = today.getFullYear(); //년
+               const month = today.getMonth() + 1; //월
+               const day = today.getDate(); //일
+               
+               time = year + '년 ' + month + '월 ' + day + '일';
+            }
+            
+            return time;         
+         }
+	
 	
 		//자바 스크립트 파일 미리보기 기능
 		function readURL(input) {

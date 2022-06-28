@@ -8,20 +8,18 @@ import com.spring.myweb.user.mapper.IUserMapper;
 
 @Service
 public class UserService implements IUserService {
-
+	
 	@Autowired
 	private IUserMapper mapper;
-	
+
 	@Override
 	public int idCheck(String id) {
-		
 		return mapper.idCheck(id);
 	}
 
 	@Override
 	public void join(UserVO vo) {
 		mapper.join(vo);
-
 	}
 
 	@Override
@@ -37,7 +35,6 @@ public class UserService implements IUserService {
 	@Override
 	public void updateUser(UserVO vo) {
 		mapper.updateUser(vo);
-
 	}
 
 	@Override

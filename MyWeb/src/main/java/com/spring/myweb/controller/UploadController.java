@@ -71,7 +71,7 @@ public class UploadController {
 	public String upload2(MultipartHttpServletRequest files) {
 		
 		//서버에서 저장할 파일 경로
-		String uploadFolder = "C:/test/upload";
+		String uploadFolder = "/Users/dood/Desktop/test";
 		
 		List<MultipartFile> list = files.getFiles("files");
 		
@@ -117,7 +117,7 @@ public class UploadController {
 	@PostMapping("/upload_ok3")
 	public String upload3(@RequestParam("file") List<MultipartFile> list) {
 		
-		String uploadFolder = "C:/test/upload";
+		String uploadFolder = "/Users/dood/Desktop/test";
 		
 		for(MultipartFile m : list) {
 			try {
@@ -143,7 +143,7 @@ public class UploadController {
 		
 		System.out.println(vo);
 		
-		String uploadFolder = "C:/test/upload";
+		String uploadFolder = "/Users/dood/Desktop/test";
 		List<UploadVO> list = vo.getList();
 		
 		for(UploadVO uvo : list) {

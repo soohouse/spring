@@ -1,7 +1,8 @@
 package com.spring.myweb.controller;
 
 import java.io.File;
-
+import java.io.IOException;
+import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -10,12 +11,19 @@ import java.util.UUID;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.spring.myweb.command.SnsBoardVO;
 import com.spring.myweb.command.UserVO;
@@ -94,6 +102,77 @@ public class SnsBoardController {
 		return service.getList(paging);
 	}
 	
+	//게시글의 이미지 파일 전송 요청
+	//이 요청은 img 태그에 의해서 요청이 들어오고 있습니다.
+	//snsList.jsp 페이지가 로딩되면서, 글 목록을 가져오고 있고, JS를 이용해서
+	//화면을 꾸밀 때 img 태그에 src에 작성된 요청 url을 통해 자동으로 요청이 들어옵니다.
+	//요청을 받아서 경로에 지정된 파일을 보낼 예정입니다.
+	@GetMapping("/display")
+	public ResponseEntity<byte[]> getFile(String fileLoca, String fileName) {
+		
+		System.out.println("fileName: " + fileName);
+		System.out.println("fileLoca: " + fileLoca);
+		
+		File file = new File("/Users/dood/Desktop/test" + fileLoca + "/" + fileName);
+		System.out.println(file);
+		
+		ResponseEntity<byte[]> result = null;
+		
+		HttpHeaders headers = new HttpHeaders();
+		//응답 헤더 파일에 여러가지 정보를 담아서 전송하는 것이 가능합니다.
+		try {
+			//probeContentType: 파라미터로 전달받은 파일의 타입을 문자열로 변환해 주는 메서드.
+			//사용자에게 보여주고자 하는 데이터가 어떤 파일인지를 검사해서 응답상태 코드를 다르게 리턴할 수도 있다.
+			headers.add("Content-Type", Files.probeContentType(file.toPath()));
+			headers.add("merong", "hello");
+		
+			//ResponseEntity<>(응답 객체에 담을 내용, 헤더에 담을 내용, 상태 메세지)
+			//FileCopyUtils: 파일 및 스트림 데이터 복사를 위한 간단한 유틸리티 메서드의 집합체.
+			//file 객체 안에 있는 내용을 복사해서 byte 배열로 변환해서 바디에 담아 화면에 전달.
+			result = new ResponseEntity<byte[]>(FileCopyUtils.copyToByteArray(file), headers, HttpStatus.OK);
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
 	
+	//상세보기 처리
+	@GetMapping("/getDetail/{bno}")
+	@ResponseBody
+	public SnsBoardVO getDetail(@PathVariable int bno) {
+		return service.getDetail(bno);
+	}
 	
-}
+	//삭제 처리
+		@PostMapping("/delete")
+		@ResponseBody
+		public String delete(@RequestBody int bno, HttpSession session) {
+			System.out.println("삭제 글 번호: " + bno);
+			SnsBoardVO vo = service.getDetail(bno);
+			
+			UserVO user = (UserVO) session.getAttribute("login");
+			
+			if(user == null || !user.getUserId().equals(vo.getWriter())) {
+				return "noAuth";
+			}
+			
+			service.delete(bno);
+			
+			//글이 삭제되었다면 더이상 이미지도 존재할 필요가 없으므로 로컬 경로의 이미지도
+			//함께 지목해서 삭제.
+			File file = new File(vo.getUploadpath() + "\\" + vo.getFilename());
+			System.out.println("파일 삭제 완료!");
+			
+			return file.delete() ? "Success" : "fail"; //파일 삭제 메서드
+			
+		}
+		
+		
+		
+		
+		
+		
+		
+	}
