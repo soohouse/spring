@@ -36,7 +36,7 @@ public class UploadController {
 			System.out.println("사이즈: " + size);
 			
 			//DB에는 파일 경로를 저장, 실제 파일은 서버 컴퓨터의 로컬 경로에 저장하는 방식.
-			String uploadFolder = "/Users/dood/Desktop/test"; //폴더 경로
+			String uploadFolder = "/Users/dood/Desktop/upload"; //폴더 경로
 			String fileExtension = fileRealName.substring(fileRealName.lastIndexOf("."), fileRealName.length());
 			
 			/*
@@ -57,7 +57,7 @@ public class UploadController {
 				folder.mkdirs(); //폴더가 존재하지 않는다면 생성해라.
 			}
 			
-			File saveFile = new File(uploadFolder + "\\" + uuids[0] + fileExtension); 
+			File saveFile = new File(uploadFolder + "/" + uuids[0] + fileExtension); 
 
 			file.transferTo(saveFile);
 		} catch (Exception e) {
@@ -71,7 +71,7 @@ public class UploadController {
 	public String upload2(MultipartHttpServletRequest files) {
 		
 		//서버에서 저장할 파일 경로
-		String uploadFolder = "/Users/dood/Desktop/test";
+		String uploadFolder = "/Users/dood/Desktop/upload";
 		
 		List<MultipartFile> list = files.getFiles("files");
 		
@@ -117,7 +117,7 @@ public class UploadController {
 	@PostMapping("/upload_ok3")
 	public String upload3(@RequestParam("file") List<MultipartFile> list) {
 		
-		String uploadFolder = "/Users/dood/Desktop/test";
+		String uploadFolder = "/Users/dood/Desktop/upload";
 		
 		for(MultipartFile m : list) {
 			try {
@@ -143,7 +143,7 @@ public class UploadController {
 		
 		System.out.println(vo);
 		
-		String uploadFolder = "/Users/dood/Desktop/test";
+		String uploadFolder = "/Users/dood/Desktop/upload";
 		List<UploadVO> list = vo.getList();
 		
 		for(UploadVO uvo : list) {

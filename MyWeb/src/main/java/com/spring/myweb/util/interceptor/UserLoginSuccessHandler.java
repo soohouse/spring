@@ -30,7 +30,7 @@ public class UserLoginSuccessHandler implements HandlerInterceptor {
 			//로그인 성공한 회원에게 세션 데이터를 생성해서 로그인 유지를 하게 해 줌.
 			HttpSession session = request.getSession();
 			session.setAttribute("login", vo);
-			response.sendRedirect(request.getContextPath());
+			response.sendRedirect("/");
 		} else { //vo == null -> 로그인 실패.
 			modelAndView.addObject("msg", "loginFail");
 			modelAndView.setViewName("/user/userLogin");

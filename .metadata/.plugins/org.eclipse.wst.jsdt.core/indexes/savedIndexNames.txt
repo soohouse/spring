@@ -1,14 +1,10 @@
 INDEX VERSION 1.4+/Users/dood/Desktop/java_web_JS/spring_basic/.metadata/.plugins/org.eclipse.wst.jsdt.core/indexes
 99231953.index
 2853149144.index
-598327821.index
 1656513363.index
+598327821.index
 4280482330.index
 813704408.index
-3587492086.index
-3344310817.index
 1214675237.index
 1079495520.index
-2186690066.index
 1087092755.index
-3344310817.index

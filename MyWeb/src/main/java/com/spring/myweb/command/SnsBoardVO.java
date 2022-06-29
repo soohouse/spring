@@ -23,5 +23,8 @@ public class SnsBoardVO {
 	private String filerealname;
 	private String content;
 	private Timestamp regdate;
+	
+	//좋아요 개수가 몇 개인지를 알려주는 변수 추가.
+	private int likeCnt;
 
 }

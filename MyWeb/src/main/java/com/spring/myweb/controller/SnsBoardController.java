@@ -26,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.spring.myweb.command.SnsBoardVO;
+import com.spring.myweb.command.SnsLikeVO;
 import com.spring.myweb.command.UserVO;
 import com.spring.myweb.snsboard.service.ISnsBoardService;
 import com.spring.myweb.util.PageVO;
@@ -54,7 +55,7 @@ public class SnsBoardController {
 		String fileloca = sdf.format(date);
 		
 		//저장할 폴더 경로
-		String uploadPath = "/Users/dood/Desktop/test" + fileloca;
+		String uploadPath = "/Users/dood/Desktop/upload" + fileloca;
 		
 		File folder = new File(uploadPath);
 		if(!folder.exists()) {
@@ -80,7 +81,7 @@ public class SnsBoardController {
 		System.out.println("변경해서 저장할 파일명: " + fileName);
 		
 		//업로드한 파일을 서버 컴퓨터 내의 지정한 경로에 실제로 저장.
-		File saveFile = new File(uploadPath + "\\" + fileName);
+		File saveFile = new File(uploadPath + "/" + fileName);
 		try {
 			file.transferTo(saveFile);
 		} catch (Exception e) {
@@ -88,7 +89,7 @@ public class SnsBoardController {
 		}
 		
 		//DB에 insert 작업을 실행.
-		SnsBoardVO snsVo = new SnsBoardVO(0, writer, uploadPath, fileloca, fileName, fileRealName, content, null);
+		SnsBoardVO snsVo = new SnsBoardVO(0, writer, uploadPath, fileloca, fileName, fileRealName, content, null, 0);
 		service.insert(snsVo);
 		return "success";
 				
@@ -99,7 +100,13 @@ public class SnsBoardController {
 	@ResponseBody
 	public List<SnsBoardVO> getList(PageVO paging) {
 		paging.setCpp(3);
-		return service.getList(paging);
+		
+		List<SnsBoardVO> list = service.getList(paging);
+		
+		for(SnsBoardVO svo : list) {
+			svo.setLikeCnt(service.likeCnt(svo.getBno()));
+		}
+		return list;
 	}
 	
 	//게시글의 이미지 파일 전송 요청
@@ -113,7 +120,7 @@ public class SnsBoardController {
 		System.out.println("fileName: " + fileName);
 		System.out.println("fileLoca: " + fileLoca);
 		
-		File file = new File("/Users/dood/Desktop/test" + fileLoca + "/" + fileName);
+		File file = new File("/Users/dood/Desktop/upload" + fileLoca + "/" + fileName);
 		System.out.println(file);
 		
 		ResponseEntity<byte[]> result = null;
@@ -169,8 +176,67 @@ public class SnsBoardController {
 			
 		}
 		
+		@GetMapping("/download")
+		@ResponseBody
+		public ResponseEntity<byte[]> download(String fileLoca, String fileName) {
+			System.out.println("fileName:" + fileName);
+			System.out.println("fileLoca:" + fileLoca);
+			File file = new File("/Users/dood/Desktop/upload" + fileLoca + "/"  + fileName);
+			
+			ResponseEntity<byte[]> result = null;
+			
+			//응답하는 본문을 브라우저가 어떻게 표시해야 할 지 알려주는 헤더 정보를 추가합니다.
+	         //inline인 경우 웹 페이지 화면에 표시되고, attachment인 경우 다운로드를 제공합니다.
+	         
+	         //request객체의 getHeader("User-Agent") -> 단어를 뽑아서 확인
+	         //ie: Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; rv:11.0) like Gecko  
+	         //chrome: Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/30.0.1599.101 Safari/537.36
+	         
+	         //파일명한글처리(Chrome browser) 크롬
+	         //header.add("Content-Disposition", "attachment; filename=" + new String(fileName.getBytes("UTF-8"), "ISO-8859-1") );
+	         //파일명한글처리(Edge) 엣지 
+	         //header.add("Content-Disposition", "attachment; filename=" + URLEncoder.encode(fileName, "UTF-8"));
+	         //파일명한글처리(Trident) IE
+	         //Header.add("Content-Disposition", "attachment; filename=" + URLEncoder.encode(fileName, "UTF-8").replaceAll("\\+", " "));
+			
+			HttpHeaders header = new HttpHeaders();
+			//응답 헤더 파일에 Content-Disposition을 attachment로 준다면
+			//브라우저 내에서 다운로드로 처리합니다.
+			//filename= 파일명.확장자로 전송합니다.
+			header.add("Content-Disposition", "attachment; filename=" + fileName);
+			try {
+				result = new ResponseEntity<>(FileCopyUtils.copyToByteArray(file), header, HttpStatus.OK);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			return result;
+		}
 		
+		//좋아요 버튼 클릭 처리
+		@PostMapping("/like")
+		@ResponseBody
+		public String likeConfirm(@RequestBody SnsLikeVO vo) {
+			System.out.println(vo.getBno());
+			System.out.println(vo.getUserId());
 		
+			int result = service.searchLike(vo);
+			if(result == 0) {
+				service.createLike(vo);
+				return "like";
+			} else {
+				service.deleteLike(vo);
+				return "delete";
+			}
+		}
+		
+		//회원이 글 목록 진입 시 좋아요 게시물 수 체크
+		@PostMapping("/listLike")
+		@ResponseBody
+		public List<Integer> liskLike(@RequestBody String userId) {
+			System.out.println("liskLike id: " + userId);
+			return service.listLike(userId);
+		}
 		
 		
 		

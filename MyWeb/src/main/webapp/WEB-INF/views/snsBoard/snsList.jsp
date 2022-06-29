@@ -373,7 +373,38 @@
 		//리스트 작업
 		let str = '';
 		let page = 1;
-		getList(1, true);
+		getListLike().done(getList);
+		
+		
+		//지금 게시판에 들어온 회원의 좋아요 게시물 목록을 받아오는 함수.
+		function getListLike() {
+			let deferred = $.Deferred();
+			console.log('먼저 실행되어야 합니다!');
+			const userId = '${login.userId}';
+			console.log(userId);
+			
+			if(userId !== '') {
+				$.ajax({
+					type: 'post',
+					url: '<c:url value="/snsBoard/listLike"/>',
+					data: userId,
+					contentType: 'application/json',
+					success: function(result) {
+						console.log('result: ' + result); //게시글 번호들
+						if(isReset) {
+							deferred.resoleve(result, page, true);
+						} else {
+							deferred.resoleve(result, page, false);
+						}
+						deferred.resolve(result, page, true);
+					}
+				}); //end ajax
+			} else {
+				deferred.resolve(null,page, true);
+			}
+			return deferred.promise();
+		}
+		
 		
 		function getList(page, reset) {
 			if(reset === true) {
@@ -396,7 +427,7 @@
 							<div class="title">
 								<p>`+ list[i].writer + `</p>
 								<small>`+ timeStamp(list[i].regdate) + `</small> &nbsp;&nbsp;
-								<a href="">이미지 다운로드</a>
+								<a href="<c:url value='/snsBoard/download?fileLoca=`+ list[i].fileloca + `&fileName=`+ list[i].filename + `' />">이미지 다운로드</a>
 							</div>
 						</div>
 						<div class="content-inner">
@@ -406,17 +437,26 @@
 						<div class="image-inner">
 							<!-- 이미지영역 -->
 							<a href="`+list[i].bno + `">
-							<img src="c:url value='/snsBoard/display?fileLoca=` + list[i].fileloca +`&fileName` + list[i].fileName +'/>">
+							<img src="<c:url value='/snsBoard/display?fileLoca=` + list[i].fileloca +`&fileName=` + list[i].filename +`'/>">
 							</a>
 						</div>
 						<div class="like-inner">
 							<!--좋아요-->
-							<img src="../resources/img/icon.jpg"> <span>522</span>
+							<img src="../resources/img/icon.jpg"> <span>` + list[i].likeCnt + `</span>
 						</div>
-						<div class="link-inner">
-							<a href="##"><i class="glyphicon glyphicon-thumbs-up"></i>좋아요</a>
-							<a href="##"><i class="glyphicon glyphicon-comment"></i>댓글달기</a> 
-							<a href="` + list[i].bno + `"><i class="glyphicon glyphicon-remove"></i>삭제하기</a>
+						<div class="link-inner">`;
+							if(data != null) {
+								if(data.includes(list[i].bno)) {
+									str += `<a id="likeBtn" href="` + list[i].bno + `"><img src="${pageContext.request.contextPath}/img/Like2.png" width="20px" height="20px">좋아요</a>`;
+								} else {
+									str += `<a id="likeBtn" href="` + list[i].bno + `"><img src="${pageContext.request.contextPath}/img/Like1.png" width="20px" height="20px">좋아요</a>`;
+								}
+							}	else {
+								str += `<a id="likeBtn" href="` + list[i].bno + `"><img src="${pageContext.request.contextPath}/img/Like1.png" width="20px" height="20px">좋아요</a>`;
+							}
+							str += `
+							<a id="comment" href="` + list[i].bno + `"><i class="glyphicon glyphicon-comment"></i>댓글달기</a> 
+							<a id="delBtn" href="` + list[i].bno + `"><i class="glyphicon glyphicon-remove"></i>삭제하기</a>
 						</div>
 						`;
 						$('#contentDiv').html(str);
@@ -428,7 +468,7 @@
 		} //end getList()
 		
 		//상세보기 처리(모달창 열어줄 겁니다.)
-		$('#contentDiv').on('click', 'image-inner a', function(e) {
+		$('#contentDiv').on('click', '.image-inner a, .link-inner #comment', function(e) {
 			e.preventDefault(); //a의 고유 기능 중지.
 			
 			//글 번호 얻어오기
@@ -459,7 +499,7 @@
 						//일치하지 않으면 문자열 "noAuth" 리턴, 성공하면 "Success" 리턴.
 						// url: /snsBoard/delete, method: post
 						
-						$('#contentDiv').on('click', '.link-inner a', function(e) {
+						$('#contentDiv').on('click', '.link-inner #delBtn', function(e) {
 							e.preventDefault();
 							
 							const bno = $(this).attr('href');
@@ -496,11 +536,60 @@
 								//사용자의 스크롤이 바닥에 닿았을 때, 페이지 변수의 값을 하나 올리고
 								//reset 여부는 false를 주셔서 누적해서 계속 불러 오시면 됩니다.
 								//게시글을 몇 개씩 불러 올지는 페이징 알고리즘에서 정해 주시면 됩니다.
-								getList(++page, false);
+								page++;
+								getListLike().done(getList);
 							}
 							
 						});
-	      
+	    
+						//좋아요 기능 구현
+						$('#contentDiv').on('click', '#likeBtn', function(e) {
+							e.preventDefault();
+							console.log('좋아요 버튼이 클릭됨!');
+							console.log(e.target);
+							
+							if(e.target.matches('img')) {
+								$('#likeBtn').click();
+								return;
+							}
+							
+							
+							const bno = $(this).attr('href');
+							const id = '${login.userId}'; //현재 로그인 중인 사용자의 아이디
+							if(id === '') {
+								alert('로그인이 필요합니다.');
+								return;
+							}
+							
+							$.ajax({
+								type: 'post',
+								url: '<c:url value="/snsBoard/like"/>',
+								contentType: 'application/json',
+								data: JSON.stringify({
+									'bno' : bno,
+									'userId' : id
+								}),
+								success : function(result) {
+									console.log('result: ' + result);
+									if(result === 'like') {
+										e.target.firstChild.setAttribute= ('src','${pageContext.request.contextPath}/img/Like2.png');
+										e.target.style.color = 'blue';
+										const cnt = e.target.parentNode.previousElementSibling.children[1];
+										console.log(#cnt);
+										$cnt.textContent = Number($cnt.textContent) + 1;
+									} else {
+										e.target.firstChild.setAttribute= ('src','${pageContext.request.contextPath}/img/Like1.png');
+										e.target.style.color ='black';
+										console.log(#cnt);
+										$cnt.textContent = Number($cnt.textContent) - 1;
+									}
+								},
+								error: function() {
+									alert('좋아요 진행 에러!');
+								}
+								
+							}); // end ajax
+						});
 		
 		
 	}); //end jQuery

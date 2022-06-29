@@ -5,15 +5,15 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-<!-- namespaces 탭에서 mvc 기능 추가 -->
-<!-- web.xml에 초기 설정 파일로 이 파일을 추가 -->
-
-<bean id="userLoginSuccessHandler" class="com.spring.myweb.util.interceptor.UserLoginSuccessHandler" />
-<bean id="userAuth" class="com.spring.myweb.util.interceptor.UserAuthHandler" />
-<bean id="boardAuth" class="com.spring.myweb.util.interceptor.BoardAuthHandler"/>
+	<!-- namespaces 탭에서 mvc 기능 추가 -->
+	<!-- web.xml에 초기 설정 파일로 이 파일을 추가 -->
+	
+	<bean id="userLoginSuccessHandler" class="com.spring.myweb.util.interceptor.UserLoginSuccessHandler" />
+	<bean id="userAuth" class="com.spring.myweb.util.interceptor.UserAuthHandler" />
+	<bean id="boardAuth" class="com.spring.myweb.util.interceptor.BoardAuthHandler" />
 	
 	<mvc:interceptors>
-	
+		
 		<!-- 로그인 이후에 실행되는 postHandler -->
 		<mvc:interceptor>
 			<mvc:mapping path="/user/login"/>
@@ -28,13 +28,13 @@
 		</mvc:interceptor>
 		
 		<mvc:interceptor>
-			<mvc:mapping path="/freeboard/freeModify"/> <!-- 수정페이지로 이동 -->
+			<mvc:mapping path="/freeboard/freeModify"/> <!-- 수정페이지 이동 -->
 			<mvc:mapping path="/freeboard/freeUpdate"/> <!-- 수정 요청 -->
 			<mvc:mapping path="/freeboard/freeDelete"/> <!-- 삭제 요청 -->
-			<ref bean="boardAuth"/>
+			<ref bean="boardAuth" />
 		</mvc:interceptor>
-
-	</mvc:interceptors>	
 		
+	</mvc:interceptors>
+
 
 </beans>
