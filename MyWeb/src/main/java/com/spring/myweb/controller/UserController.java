@@ -16,11 +16,14 @@ import com.spring.myweb.command.UserVO;
 import com.spring.myweb.user.service.IUserService;
 import com.spring.myweb.util.MailSendService;
 
+import lombok.extern.slf4j.Slf4j;
+import net.sf.log4jdbc.log.slf4j.Slf4jSpyLogDelegator;
 import oracle.jdbc.proxy.annotation.Post;
 
 @Controller
 @RequestMapping("/user")
 public class UserController {
+	
 
 	//도로명주소 승인키 -> devU01TX0FVVEgyMDIyMDYyMjE2MTc1NTExMjcxNjc=
 	

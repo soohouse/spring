@@ -3,9 +3,11 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:beans="http://www.springframework.org/schema/beans"
 	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
 	xsi:schemaLocation="http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd
 		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
 
 	<!-- 자동으로 컨트롤러와 매핑 메서드 탐색 (핸들러 매핑, 핸들러 어댑터 빈 등록) -->
 	<annotation-driven />
@@ -58,6 +60,14 @@
  		<!-- 업로드 요청을 변환할 때 사용할 문자 인코딩 방식 -->
  		<beans:property name="defaultEncoding" value="utf-8"/>
  	</beans:bean>
+ 	
+ 	<!-- 
+ 		공통 로그들, 예외 처리 내용들을 기존 클래스와 분리해서 객체 지향적으로 사용하기 위해
+ 		Aspect(공통 로직들)와 Target(Service 클래스들, 메서드들)을 연결할 수 있도록
+ 		가상 환경을 구축해 주는 빈
+ 	 -->
+ 	
+ 	<aop:aspectj-autoproxy />
  
  
 </beans:beans>

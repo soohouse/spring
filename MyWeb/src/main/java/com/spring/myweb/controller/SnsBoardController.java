@@ -10,6 +10,8 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -29,6 +31,7 @@ import com.spring.myweb.command.SnsBoardVO;
 import com.spring.myweb.command.SnsLikeVO;
 import com.spring.myweb.command.UserVO;
 import com.spring.myweb.snsboard.service.ISnsBoardService;
+import com.spring.myweb.snsboard.service.SnsBoardService;
 import com.spring.myweb.util.PageVO;
 
 @Controller
